@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script type="text/javascript">
+        function GetTime() {
+            alert("Ready!");
+            $.post("/Restaurant/GetTime", function (response) {
+                alert(response);
+                $("#myPnl").html(response);
+            });
+
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <div id="myPnl" style="width: 300px; height: 30px; border: 1px dotted silver;">
+    </div>
+    <a href="#" onclick="return GetTime();">Click Me</a>
+</body>
+</html>

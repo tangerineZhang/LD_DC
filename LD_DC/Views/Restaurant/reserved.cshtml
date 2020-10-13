@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <meta name="wap-font-scale" content="no">
+    <title>预订</title>
+
+    <!--<link href="~/Content/weeks/animate.css" rel="stylesheet" />-->
+    <link href="~/Content/weeks/common.css" rel="stylesheet" />
+    <link href="~/Content/weeks/reserved.css" rel="stylesheet" />
+
+
+
+    <script src="~/Scripts/weeks/preAdjust.js"></script>
+    <script src="~/Scripts/weeks/vue.js"></script>
+    <script src="~/Scripts/weeks/vue-resource.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id="loading" class="loading" v-show="isShow"></div>
+
+
+    
+    <div class="content-body">
+        <div class="title-box">
+            <a onclick="onNowDay()" class="font-36 font-color-theme">今天</a>
+            <h1 id="select-date" class="font-36 font-color-gray3 font-weight-normal"></h1>
+            
+        </div>
+        <div id="date-box" class="date-box" v-cloak>
+            <ul class="date-list">
+                <li v-for="week in weeks" v-bind:class="[week.nowday, week.select]">
+                    <h6 class="font-24 font-weight-normal">{{week.week}}</h6>
+                </li>
+            </ul>
+            <ul id="days-list" class="date-list days-list" style="left: -100%;">
+                <li v-for="day in days" v-on:click.stop="onSwitch('切换日期', day)" v-bind:class="[day.nowday, day.select]">
+                    <p class="font-40">{{day.day}}</p>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
+
+    <script src="~/Scripts/weeks/common.js"></script>
+    <script src="~/Scripts/weeks/reserved.js"></script>
+</body>
+
+</html>

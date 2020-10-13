@@ -1,0 +1,71 @@
+/*今日详情*/
+        .details {
+            margin: 7px 10px 10px 10px;
+            min-height: 80px;
+            /*border: 0.75px solid rgb(127,127,127);
+            border-radius: 7px;
+            -moz-border-radius: 7px; */ /* Old Firefox */
+        }
+
+        .detailsTitle {
+            height: 32px;
+            margin: 0px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #rectangle {
+            position: absolute;
+            margin-top: 8px;
+            margin-left: 5px;
+            width: 4px;
+            height: 16px;
+            background: rgb(253, 215, 30);
+        }
+
+        .detailsP {
+            width: 170px;
+            color: rgb(64,64,64);
+            margin-left: 9px;
+            margin-top: -3px;
+            font-size: 1.0rem;
+            font-weight: bold;
+        }
+
+        .detailsInfo {
+            height: 50px;
+            margin: 0px;
+            border-bottom: 1px solid #f7f7f7;
+        }
+
+        .divZW {
+            font-size: 1.0rem;
+            font-weight: bold;
+            position: absolute;
+            color: rgb(0, 148, 255);
+            margin-top: 13px;
+            margin-left: 23px;
+        }
+
+        .divWW {
+            font-size: 1.0rem;
+            font-weight: bold;
+            position: absolute;
+            color: rgb(0, 148, 255);
+            margin-top: 13px;
+            margin-left: 23px;
+        }
+
+        .divYJ {
+            font-size: 0.8rem;
+            position: absolute;
+            margin-top: 13px;
+            margin-left: 123px;
+        }
+
+        .divSJ {
+            font-size: 0.8rem;
+            position: absolute;
+            margin-top: 13px;
+            margin-left: 243px;
+        }
+        /*今日详情 end*/

@@ -1,0 +1,1319 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绿都订餐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!-- 禁止百度转码显示 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <link href="~/Content/SupplierIndex.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.min.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.picker.min.css" rel="stylesheet" />
+
+    <link href="~/Scripts/muicalendar/libs/swiper.min.css" rel="stylesheet" />
+    <link href="~/Scripts/muicalendar/libs/calendar_base.css" rel="stylesheet" />
+    <link href="~/Scripts/muicalendar/css/showcase.css" rel="stylesheet" />
+
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>
+
+    <style>
+        html,
+        body {
+            /*background-color: #efeff4;*/
+            background-color: #ffffff;
+        }
+
+        body, .mui-content {
+            background-color: #ffffff;
+        }
+
+        .mui-bar .mui-pull-left .mui-icon {
+            padding-right: 5px;
+            font-size: 28px;
+        }
+
+        .mui-bar .mui-btn {
+            font-weight: normal;
+            font-size: 17px;
+        }
+
+        .mui-bar .mui-btn-link {
+            top: 1px;
+        }
+
+        .mui-bar .mui-title {
+            background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Opera 11.1 - 12.0 */
+            background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Firefox 3.6 - 15 */
+            background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Safari 5.1 - 6.0 */
+            background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+            background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* 标准的语法（必须放在最后）*/
+            color: white;
+        }
+
+        .mui-bar-nav {
+            background-color: #dc38a0;
+        }
+
+            .mui-bar-nav.mui-bar .mui-icon {
+                background-color: #ec885f;
+            }
+
+        .mui-table-view .mui-media-object {
+            line-height: 42px;
+            max-width: 84px;
+            height: 42px;
+        }
+
+        .mui-btn-block {
+            padding-top: 1rem;
+            color: rgb(64,64,64);
+            font-size: 1.0rem;
+            font-weight: bold;
+            display: block;
+            padding: 0;
+        }
+
+        .mui-btn, button, input[type=button], input[type=reset], input[type=submit] {
+            border: none;
+        }
+
+        /*换行*/
+        .mui-ellipsis {
+            overflow: hidden;
+            white-space: inherit;
+            text-overflow: ellipsis;
+        }
+
+        .mui-table-view-cell > a:not(.mui-btn) {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            margin: -11px -15px;
+            padding: inherit;
+            white-space: inherit;
+            text-overflow: ellipsis;
+            color: inherit;
+        }
+        /*换行 end*/
+
+        .mui-input-row .mui-btn {
+            line-height: 1.1;
+            float: none;
+            padding: 10px 15px;
+            margin: 2px auto;
+            width: 100%;
+        }
+
+        /*今日详情*/
+        .details {
+            margin: 7px 10px 10px 10px;
+            min-height: 80px;
+            /*border: 0.75px solid rgb(127,127,127);
+            border-radius: 7px;
+            -moz-border-radius: 7px; */ /* Old Firefox */
+        }
+
+        .detailsToday {
+            margin: 7px 10px 10px 10px;
+        }
+
+        .detailsTitle {
+            height: 32px;
+            margin: 0px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #rectangle {
+            position: absolute;
+            margin-top: 8px;
+            margin-left: 5px;
+            width: 4px;
+            height: 16px;
+            background: rgb(253, 215, 30);
+        }
+
+        .detailsP {
+            width: 100px;
+            color: rgb(64,64,64);
+            margin-left: 9px;
+            margin-top: -3px;
+            font-size: 1.0rem;
+            font-weight: bold;
+        }
+
+        .detailsPToday {
+            width: 100px;
+            color: rgb(64,64,64);
+            margin-left: 9px;
+            margin-top: -3px;
+            font-size: 1.0rem;
+            font-weight: bold;
+        }
+
+        .detailsInfo {
+            height: 50px;
+            margin: 0px;
+            border-bottom: 1px solid #f7f7f7;
+        }
+
+        .divZW {
+            font-size: 1.0rem;
+            font-weight: bold;
+            position: absolute;
+            color: rgb(0, 148, 255);
+            margin-top: 13px;
+            margin-left: 23px;
+        }
+
+        .divWW {
+            font-size: 1.0rem;
+            font-weight: bold;
+            position: absolute;
+            color: rgb(0, 148, 255);
+            margin-top: 13px;
+            margin-left: 23px;
+        }
+
+        .divYJ {
+            font-size: 0.8rem;
+            position: absolute;
+            margin-top: 13px;
+            margin-left: 123px;
+        }
+
+        .divSJ {
+            font-size: 0.8rem;
+            position: absolute;
+            margin-top: 13px;
+            margin-left: 243px;
+        }
+        /*今日详情 end*/
+        /*日历*/
+        .em-week {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 0px;
+            padding-bottom: 10px;
+            color: #999999;
+            font-size: 13px;
+        }
+
+        .mui-input-row .mui-btn {
+            line-height: 1.1;
+            float: none;
+            padding: 10px 15px;
+            margin: 2px auto;
+            width: 100%;
+        }
+
+        .em-journal-title {
+            width: 100%;
+            display: block;
+            height: 50px;
+            line-height: 50px;
+            background-color: #ffffff;
+            /* border-bottom: 0.75px solid rgb(217,217,217); */
+        }
+
+        .em-per-block {
+            float: left;
+            width: 33%;
+            color: #6b6b6b;
+            font-size: 18px;
+        }
+
+        .em-calendar-active {
+            background-color: #3C80E6;
+            height: 10.030vw;
+            width: 10.285vw;
+        }
+
+
+        .em-calendar-content .em-calendar-item {
+            float: left;
+            /*width: 14.285vw;*/
+            width: 14.030vw;
+            height: 10.285vw;
+            text-align: center;
+            /* border: 1px solid #000; */
+            border-radius: 10%;
+            margin-bottom: 0px;
+        }
+
+            .em-calendar-content .em-calendar-item .day {
+                display: block;
+                padding-top: 0vw;
+                font-size: 16px;
+                color: #333333;
+            }
+
+        .em-calendar-content .isforbid0.em-calendar-item .day {
+            display: block;
+            padding-top: 0px;
+            font-size: 16px;
+            color: #D8D8D8;
+        }
+
+
+        /*日历 end*/
+    </style>
+
+    <script src="~/Scripts/muicalendar/libs/swiper.min.js"></script>
+    <script src="~/Scripts/muicalendar/libs/mustache.min.js"></script>
+    <script src="~/Scripts/muicalendar/libs/calendar_base.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script type="text/javascript">
+        //function add_click() {
+        //    //var eid = 111;
+        //    //$.post("/Supplier/AddFood", { eid: eid }, function (response) {
+        //    //    alert(response);
+        //    //});
+        //    alert("/Supplier/AddFood");
+        //    window.location = "/Supplier/AddFood";
+        //}
+
+
+    </script>
+
+</head>
+<body>
+    <header id="header" class="mui-bar mui-bar-nav ">
+        @*<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>*@
+        <h1 class="mui-title"><span id="rname">@ViewData["rname"]</span> | <span id="raddress">@ViewData["raddress"]</span></h1>
+        <a id="showRPicker" class="mui-icon mui-icon-bars mui-pull-right"></a>
+    </header>
+
+    <div class="mui-content">
+        <div style="padding: 10px 10px;">
+            <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+                <a class="mui-control-item" href="#item4">当日</a>
+                <a class="mui-control-item  mui-active" href="#item1">本月</a>
+                <a class="mui-control-item" href="#item2">配餐</a>
+                <a class="mui-control-item" href="#item3">菜品</a>
+            </div>
+        </div>
+        <div>
+            <div id="item4" class="mui-control-content" style="background-color: #ffffff;">
+                <div class="detailsToday">
+                    <div class="detailsTitle">
+                        <div id="rectangle">
+                            <p class="detailsP">
+                                本月订餐情况
+                            </p>
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">全部</div>
+                            @{
+                                System.Data.DataTable dsThisMonth1 = (System.Data.DataTable)ViewData["dsThisMonth"];
+                                if (dsThisMonth1.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsThisMonth1.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsThisMonth1.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsTitle">
+                        <div id="rectangle">
+                            <p class="detailsPToday">
+                                今日用餐情况<span class="spanDate">(@ViewData["Today"])</spanclass>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">中餐</div>
+                            @{
+                                System.Data.DataTable dsTodayLunch1 = (System.Data.DataTable)ViewData["dsTodayLunch"];
+                                if (dsTodayLunch1.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTodayLunch1.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTodayLunch1.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divWW">会议中餐</div>
+                            @{
+                                System.Data.DataTable dsTodayMeetingLunch = (System.Data.DataTable)ViewData["dsTodayMeetingLunch"];
+                                if (dsTodayMeetingLunch.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTodayMeetingLunch.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTodayMeetingLunch.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divWW">晚餐</div>
+                            @{
+                                System.Data.DataTable dsTodayDinner1 = (System.Data.DataTable)ViewData["dsTodayDinner"];
+                                if (dsTodayDinner1.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTodayDinner1.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTodayDinner1.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+
+                    <div class="detailsTitle">
+                        <div id="rectangle">
+                            <p class="detailsPToday">
+                                明日订餐情况<span class="spanDate"> (@ViewData["Tomorrow1"])</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">中餐</div>
+                            @{
+                                System.Data.DataTable dsTomorrowLunch1 = (System.Data.DataTable)ViewData["dsTomorrowLunch"];
+                                if (dsTomorrowLunch1.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTomorrowLunch1.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTomorrowLunch1.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">会议中餐</div>
+                            @{
+                                System.Data.DataTable dsTomorrowMeetingLunch = (System.Data.DataTable)ViewData["dsTomorrowMeetingLunch"];
+                                if (dsTomorrowMeetingLunch.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTomorrowMeetingLunch.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTomorrowMeetingLunch.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divWW">晚餐</div>
+                            @{
+                                System.Data.DataTable dsTomorrowDinner1 = (System.Data.DataTable)ViewData["dsTomorrowDinner"];
+                                if (dsTomorrowDinner1.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTomorrowDinner1.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTomorrowDinner1.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="item1" class="mui-control-content mui-active" style="background-color: #ffffff;">
+                <div class="em-journal-title">
+                    <div class="em-per-block pre">
+                        <span class="mui-icon mui-icon-arrowleft"></span>
+                        <span>上一月</span>
+                    </div>
+                    <div class="em-per-block mid">
+                        <span>...</span>
+                    </div>
+                    <div class="em-per-block next">
+                        <span>下一月</span>
+                        <span class="mui-icon mui-icon-arrowright"></span>
+                    </div>
+                </div>
+                <!--日历容器-->
+                <div id="calendar">
+                </div>
+
+
+
+                <div class="details">
+                    <div class="detailsTitle">
+                        <div id="rectangle">
+                            <p class="detailsP">
+                                本月订餐情况
+                            </p>
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">全部</div>
+                            @{
+                                System.Data.DataTable dsThisMonth = (System.Data.DataTable)ViewData["dsThisMonth"];
+                                if (dsThisMonth.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsThisMonth.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsThisMonth.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsTitle">
+                        <div id="rectangle">
+                            <p class="detailsP">
+                                <span>今日</span>订餐情况
+                            </p>
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divZW">中餐</div>
+                            @{
+                                System.Data.DataTable dsTodayLunch = (System.Data.DataTable)ViewData["dsTodayLunch"];
+                                if (dsTodayLunch.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTodayLunch.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTodayLunch.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="detailsInfo">
+                        <div id="divInfo1">
+                            <div class="divWW">晚餐</div>
+                            @{
+                                System.Data.DataTable dsTodayDinner = (System.Data.DataTable)ViewData["dsTodayDinner"];
+                                if (dsTodayDinner.Rows.Count > 0)
+                                {
+                                    <div class="divYJ">预计 <span style="font-size: 1.0rem;">@dsTodayDinner.Rows[0]["yj"].ToString()</span> 人</div>
+                                    <div class="divSJ">实际 <span style="font-size: 1.0rem;">@dsTodayDinner.Rows[0]["sj"].ToString()</span> 人</div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                @*<div class="backToday">
+                        返回今天
+                    </div>*@
+                <div id='rGuid' class="ui-alert" style="display:none">@ViewData["restaurantGuid"]</div>
+            </div>
+            <div id="item2" class="mui-control-content">
+
+                @*<button id='demo4' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">选择日期 ...</button>*@
+                <div class="mui-card" style="margin-bottom: 50px;">
+                    @*<form class="mui-input-group">*@
+                    <ul class="mui-table-view">
+                        @{
+                            System.Data.DataTable dtSetMeal = (System.Data.DataTable)ViewData["dsSetMeal"];
+                            System.Data.DataTable dtDailyMeal = (System.Data.DataTable)ViewData["dsDailyMeal"];
+                            System.Data.DataRow[] drsDM = null;
+                            bool isNow = false;
+                            bool isFuture = false;
+                            bool isHistory = false;
+                            System.Data.DataRow[] drsJR = null;
+                            System.Data.DataRow[] drsQT = null;
+
+                            drsJR = dtSetMeal.Select("begDate = '" + DateTime.Now.ToShortDateString() + "' and endDate =  '" + DateTime.Now.ToShortDateString() + "'", "eGuid asc");
+                            drsQT = dtSetMeal.Select("(begDate > '" + DateTime.Now.ToShortDateString() + "' and endDate >  '" + DateTime.Now.ToShortDateString() + "') or (begDate < '" + DateTime.Now.ToShortDateString() + "' and endDate <  '" + DateTime.Now.ToShortDateString() + "')", "begDate desc");
+
+                            if (drsJR.Length > 0)
+                            {
+                                for (int i = 0; i < drsJR.Length; i++)
+                                {
+                                    drsDM = dtDailyMeal.Select("sGuid = '" + @drsJR[i]["guid"].ToString() + "' ");
+                                    var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                    var begtime = Convert.ToDateTime(drsJR[i]["begDate"].ToString());
+                                    string begW = weekdays[(int)begtime.DayOfWeek];
+                                    var endtime = Convert.ToDateTime(drsJR[i]["endDate"].ToString());
+                                    string endW = weekdays[(int)endtime.DayOfWeek];
+                                    DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+                                    //今日
+
+                                    if (isNow == false)
+                                    {
+                                        <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                            <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">今日</span>
+                                        </div>
+                                        isNow = true;
+                                    }
+
+                                    <li class="mui-table-view-cell mui-collapse mui-active">
+                                        <a class="mui-navigate-right" href="#">
+                                            <b>@Convert.ToDateTime(drsJR[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(drsJR[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@drsJR[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                        </a>
+                                        <div class="mui-collapse-content">
+                                            <form class="mui-input-group">
+
+                                                @for (int j = 0; j < drsDM.Length; j++)
+                                                {
+                                                    <div class="mui-input-row">
+                                                        <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                        <label>@drsDM[j]["name"].ToString()</label>
+                                                        <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                    </div>
+
+                                                }
+                                                <div class="mui-input-row">
+                                                    <button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-compose" onclick="update_click('@ViewData["restaurantGuid"]','@drsJR[i]["guid"].ToString()')">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                                <div class="mui-input-row">
+                                                    <button id='confirmBtn' type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-closeempty" onclick="delete_click('@ViewData["restaurantGuid"]','@drsJR[i]["guid"].ToString()')">
+                                                        删除
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+
+                                }
+                            }
+
+                            if (drsQT.Length > 0)
+                            {
+                                int historyCount = 0;
+                                for (int i = 0; i < drsQT.Length; i++)
+                                {
+                                    drsDM = dtDailyMeal.Select("sGuid = '" + @drsQT[i]["guid"].ToString() + "' ");
+                                    var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                    var begtime = Convert.ToDateTime(drsQT[i]["begDate"].ToString());
+                                    string begW = weekdays[(int)begtime.DayOfWeek];
+                                    var endtime = Convert.ToDateTime(drsQT[i]["endDate"].ToString());
+                                    string endW = weekdays[(int)endtime.DayOfWeek];
+                                    DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+                        
+
+                                    if (nowdate <= Convert.ToDateTime(drsQT[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(drsQT[i]["endDate"].ToString()))
+                                    {//未来
+
+                                        if (isFuture == false)
+                                        {
+                                            <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">未来</span>
+                                            </div>
+                                            isFuture = true;
+                                        }
+
+                                        <li class="mui-table-view-cell mui-collapse">
+                                            <a class="mui-navigate-right" href="#">
+                                                <b>@Convert.ToDateTime(drsQT[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(drsQT[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@drsQT[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                            </a>
+                                            <div class="mui-collapse-content">
+                                                <form class="mui-input-group">
+
+                                                    @for (int j = 0; j < drsDM.Length; j++)
+                                                    {
+                                                        <div class="mui-input-row">
+                                                            <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                            <label>@drsDM[j]["name"].ToString()</label>
+                                                            <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                        </div>
+
+                                                    }
+                                                    <div class="mui-input-row">
+                                                        <button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-compose" onclick="update_click('@ViewData["restaurantGuid"]','@drsQT[i]["guid"].ToString()')">
+                                                            修改
+                                                        </button>
+                                                    </div>
+                                                    <div class="mui-input-row">
+                                                        <button id='confirmBtn' type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-closeempty" onclick="delete_click('@ViewData["restaurantGuid"]','@drsQT[i]["guid"].ToString()')">
+                                                            删除
+                                                        </button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                    else if (nowdate >= Convert.ToDateTime(drsQT[i]["begDate"].ToString()) && nowdate >= Convert.ToDateTime(drsQT[i]["endDate"].ToString()))
+                                    {//历史
+                                        if (historyCount < 5)
+                                        {
+                                            if (isHistory == false)
+                                            {
+                                                <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                    <span style="padding: 0px 0px 0px 10px; color: #8a8a8a; font-weight: bold; ">历史</span>
+                                                </div>
+                                                isHistory = true;
+                                            }
+
+                                            <li class="mui-table-view-cell mui-collapse">
+                                                <a class="mui-navigate-right" href="#">
+                                                    <b>@Convert.ToDateTime(drsQT[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(drsQT[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@drsQT[i]["eType"].ToString()</b><span class="mui-badge">@drsDM.Length</span>
+                                                </a>
+                                                <div class="mui-collapse-content">
+                                                    <form class="mui-input-group">
+
+                                                        @for (int j = 0; j < drsDM.Length; j++)
+                                                        {
+                                                            <div class="mui-input-row">
+                                                                <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                <label>@drsDM[j]["name"].ToString()</label>
+                                                                <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                            </div>
+
+                                                        }
+
+
+
+                                                    </form>
+                                                </div>
+                                            </li>
+                                            historyCount++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            @*if (dtSetMeal.Rows.Count > 0)
+                                {
+                                    for (int i = 0; i < dtSetMeal.Rows.Count; i++)
+                                    {
+                                        drsDM = dtDailyMeal.Select("sGuid = '" + @dtSetMeal.Rows[i]["guid"].ToString() + "' ");
+                                        var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                        var begtime = Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString());
+                                        string begW = weekdays[(int)begtime.DayOfWeek];
+                                        var endtime = Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString());
+                                        string endW = weekdays[(int)endtime.DayOfWeek];
+                                        DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+                                        //今日
+                                        if (nowdate >= Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()))
+                                        {
+                                            if (isNow == false)
+                                            {
+                                                <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                    <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">今日</span>
+                                                </div>
+                                                isNow = true;
+                                            }
+
+                                            <li class="mui-table-view-cell mui-collapse mui-active">
+                                                <a class="mui-navigate-right" href="#">
+                                                    <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@dtSetMeal.Rows[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                                </a>
+                                                <div class="mui-collapse-content">
+                                                    <form class="mui-input-group">
+
+                                                        @for (int j = 0; j < drsDM.Length; j++)
+                                                        {
+                                                            <div class="mui-input-row">
+                                                                <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                <label>@drsDM[j]["name"].ToString()</label>
+                                                                <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                            </div>
+
+                                                        }
+                                                        <div class="mui-input-row">
+                                                            <button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-compose" onclick="update_click('@ViewData["restaurantGuid"]','@dtSetMeal.Rows[i]["guid"].ToString()')">
+                                                                修改
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        }
+                                        else if (nowdate <= Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()))
+                                        {//未来
+
+                                            if (isFuture == false)
+                                            {
+                                                <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                    <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">未来</span>
+                                                </div>
+                                                isFuture = true;
+                                            }
+
+                                            <li class="mui-table-view-cell mui-collapse">
+                                                <a class="mui-navigate-right" href="#">
+                                                    <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@dtSetMeal.Rows[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                                </a>
+                                                <div class="mui-collapse-content">
+                                                    <form class="mui-input-group">
+
+                                                        @for (int j = 0; j < drsDM.Length; j++)
+                                                        {
+                                                            <div class="mui-input-row">
+                                                                <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                <label>@drsDM[j]["name"].ToString()</label>
+                                                                <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                            </div>
+
+                                                        }
+
+
+
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        }
+                                        else if (nowdate >= Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()) && nowdate >= Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()))
+                                        {//历史
+                                            if (isHistory == false)
+                                            {
+                                                <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                    <span style="padding: 0px 0px 0px 10px; color: #8a8a8a; font-weight: bold; ">历史</span>
+                                                </div>
+                                                isHistory = true;
+                                            }
+
+                                            <li class="mui-table-view-cell mui-collapse">
+                                                <a class="mui-navigate-right" href="#">
+                                                    <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@dtSetMeal.Rows[i]["eType"].ToString()</b><span class="mui-badge">@drsDM.Length</span>
+                                                </a>
+                                                <div class="mui-collapse-content">
+                                                    <form class="mui-input-group">
+
+                                                        @for (int j = 0; j < drsDM.Length; j++)
+                                                        {
+                                                            <div class="mui-input-row">
+                                                                <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                <label>@drsDM[j]["name"].ToString()</label>
+                                                                <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                            </div>
+
+                                                        }
+
+
+
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        }
+
+                                    }
+                                }*@
+
+                        }
+                        @*<li class="mui-table-view-cell mui-collapse">
+                                <a class="mui-navigate-right" href="#">
+                                    <b>9月4日</b> 周二 - <b>9月5日</b> 周三 <b>中午</b>
+                                </a>
+                                <div class="mui-collapse-content">
+                                    <form class="mui-input-group">
+                                        <div class="mui-input-row">
+                                            <label>Input</label>
+                                            <input type="text" placeholder="普通输入框">
+                                        </div>
+                                        <div class="mui-input-row">
+                                            <label>Input</label>
+                                            <input type="text" class="mui-input-clear" placeholder="带清除按钮的输入框">
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>*@
+                    </ul>
+                    @*<div class="choosDate" style="">
+                            <div class="dateSpan"><div id='demo4' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">9月4日</div></div> <div class="weekSpan">周二</div><div class="dateSpan">
+                                -
+                            </div><div class="dateSpan">
+                                <div id='demo5' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">9月5日</div>
+                            </div> <div class="weekSpan">周三</div>
+                            <div class="typeSpan"><div id='showUserPicker' class="mui-btn mui-btn-block" type='button'>中午</div></div>
+                        </div>
+                        <div class="mui-input-row mui-checkbox">
+                            <label>checked：false</label>
+                            <input name="checkbox1" value="Item 3" type="checkbox">
+                        </div>
+                        <div class="mui-input-row mui-checkbox">
+                            <label>checked：true</label>
+                            <input name="checkbox1" value="Item 4" type="checkbox" checked>
+                        </div>
+                        <div class="mui-input-row mui-checkbox mui-disabled">
+                            <label>disabled checkbox</label>
+                            <input name="checkbox1" type="checkbox" disabled="disabled">
+                        </div>*@
+                    @*</form>*@
+                </div>
+
+                <nav class="mui-bar mui-bar-tab">
+                    <a id="addDailyMeal" class="mui-tab-item" style="background-color: #fdd71e;height:50px;width:100%;">
+                        <span class="mui-icon mui-icon-plusempty"></span>
+                        @*<span class="mui-icon mui-icon-plusempty"><span class="mui-badge">9</span></span>*@
+                        <span class="mui-tab-label">添加配餐</span>
+                    </a>
+                </nav>
+            </div>
+            <div id="item3" style="background-color:white" class="mui-control-content">
+                @*<div class="mui-card">*@
+                @*<div style="margin: 10px 0px 10px 0px;padding-top:10px;">
+                            <span style="padding: 0px 0px 0px 10px; color: #007aff;font-weight:bold;">测试</span>
+                        </div>
+                    <ul class="mui-table-view">
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/宫保鸡丁.jpg">
+                                <div class="mui-media-body">
+                                    宫保鸡丁
+                                    <p class='mui-ellipsis'>选用鸡肉为主料，佐以花生米、黄瓜、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/鱼香肉丝.jpg">
+                                <div class="mui-media-body">
+                                    鱼香肉丝
+                                    <p class='mui-ellipsis'>相传灵感来自泡椒肉丝，民国年间则是由四川籍厨师创制而成。</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/回锅肉.jpg">
+                                <div class="mui-media-body">
+                                    回锅肉
+                                    <p class='mui-ellipsis'>制作原料主要有猪肉、青椒、蒜苗等，口味独特，色泽红亮，肥而不腻，入口浓香。</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>*@
+                @{
+                    string type = String.Empty;
+                    System.Data.DataTable dt = (System.Data.DataTable)ViewData["dsMenuInfo"];
+                    System.Data.DataTable dtType = (System.Data.DataTable)ViewData["zd_VegetableType"];
+
+
+                    if (dtType.Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dtType.Rows.Count; j++)
+                        {
+                            System.Data.DataRow[] drsMenu = dt.Select("vtID = '" + dtType.Rows[j]["vtID"].ToString() + "' ");
+                            if (drsMenu.Length > 0)
+                            {
+                                <div style=" margin: 0px 0px 10px 0px; padding-top: 10px;">
+                                    <span style="padding: 0px 0px 0px 10px; color: #007aff;font-weight:bold;">@dtType.Rows[j]["vtName"].ToString()</span>
+                                </div>
+                                for (int i = 0; i < drsMenu.Length; i++)
+                                {
+                                    if (j == dtType.Rows.Count - 1 && i == drsMenu.Length - 1)
+                                    {
+                                        <ul class="mui-table-view" style="margin-bottom: 50px;">
+                                            <li style="white-space: inherit;" class="mui-table-view-cell mui-media">
+                                                <a href="javascript:;">
+                                                    <img style="width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="@drsMenu[i]["imgPath"].ToString()">
+                                                    <div class="mui-media-body">
+                                                        @drsMenu[i]["name"].ToString()
+                                                        <p class='mui-ellipsis'>@drsMenu[i]["describe"].ToString()</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <ul class="mui-table-view">
+                                            <li style="white-space: inherit;" class="mui-table-view-cell mui-media">
+                                                <a href="javascript:;">
+                                                    <img style="width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="@drsMenu[i]["imgPath"].ToString()">
+                                                    <div class="mui-media-body">
+                                                        @drsMenu[i]["name"].ToString()
+                                                        <p class='mui-ellipsis'>@drsMenu[i]["describe"].ToString()</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    }
+
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                @*<div style=" margin: 10px 0px 10px 0px;">
+                        <span style="padding: 0px 0px 0px 10px; color: #007aff;font-weight:bold;">冷菜</span>
+                    </div>
+                    <ul class="mui-table-view">
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/宫保鸡丁.jpg">
+                                <div class="mui-media-body">
+                                    宫保鸡丁
+                                    <p class='mui-ellipsis'>选用鸡肉为主料，佐以花生米、黄瓜、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/鱼香肉丝.jpg">
+                                <div class="mui-media-body">
+                                    鱼香肉丝
+                                    <p class='mui-ellipsis'>相传灵感来自泡椒肉丝，民国年间则是由四川籍厨师创制而成。</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mui-table-view-cell mui-media">
+                            <a href="javascript:;">
+                                <img style="max-width: 84px; height: 64px;" class="mui-media-object mui-pull-left" src="~/FoodImages/回锅肉.jpg">
+                                <div class="mui-media-body">
+                                    回锅肉
+                                    <p class='mui-ellipsis'>制作原料主要有猪肉、青椒、蒜苗等，口味独特，色泽红亮，肥而不腻，入口浓香。</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>*@
+                @*</div>*@
+                <nav class="mui-bar mui-bar-tab">
+                    <a id="addFood" class="mui-tab-item" style="background-color: #fdd71e;height:50px;width:100%;">
+                        <span class="mui-icon mui-icon-plusempty"></span>
+                        @*<span class="mui-icon mui-icon-plusempty"><span class="mui-badge">9</span></span>*@
+                        <span class="mui-tab-label">添加</span>
+                    </a>
+                </nav>
+            </div>
+
+        </div>
+
+    </div>
+    <div id='vtID' class="ui-alert" style="display:none"></div>
+    <div id='vtRID' class="ui-alert" style="display:none"></div>
+    <div id='result' class="ui-alert"></div>
+    @*<div id="about" class="mui-page">
+            <div class="mui-navbar-inner mui-bar mui-bar-nav">
+                <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                    <span class="mui-icon mui-icon-left-nav"></span>设置
+                </button>
+                <h1 class="mui-center mui-title">关于MUI</h1>
+            </div>
+            <div class="mui-page-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <ul class="mui-table-view">
+                            <li class="mui-table-view-cell mui-plus-visible mui-stream-hidden">
+                                <a id="rate" class="mui-navigate-right">评分鼓励</a>
+                            </li>
+                            <li class="mui-table-view-cell mui-plus-visible">
+                                <a id="welcome" class="mui-navigate-right">欢迎页</a>
+                            </li>
+                            <li class="mui-table-view-cell mui-plus-visible">
+                                <a id="share" class="mui-navigate-right">分享推荐</a>
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <a id="tel" class="mui-navigate-right">客服电话</a>
+                            </li>
+                            <li class="mui-table-view-cell">
+                                <a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
+                            </li>
+                            <li id="check_update" class="mui-table-view-cell mui-plus-visible">
+                                <a id="update" class="mui-navigate-right">检查更新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="copyright">测试：@ViewData["code"]</div>*@
+
+    <script src="~/Scripts/muijs/mui.min.js"></script>
+    <script src="~/Scripts/muijs/mui.picker.min.js"></script>
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>
+
+
+    <script type="text/javascript">
+        mui.init({
+            swipeBack: true //启用右滑关闭功能
+        });
+
+        (function ($) {
+            $.init();
+            var result = $('#result')[0];
+            var btns = $('.btn');
+            btns.each(function (i, btn) {
+                btn.addEventListener('tap', function () {
+                    var _self = this;
+                    if (_self.picker) {
+                        _self.picker.show(function (rs) {
+                            result.innerText = '选择结果: ' + rs.text;
+                            _self.picker.dispose();
+                            _self.picker = null;
+                        });
+                    } else {
+                        var optionsJson = this.getAttribute('data-options') || '{}';
+                        var options = JSON.parse(optionsJson);
+                        var id = this.getAttribute('id');
+                        /*
+                         * 首次显示时实例化组件
+                         * 示例为了简洁，将 options 放在了按钮的 dom 上
+                         * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                         */
+                        _self.picker = new $.DtPicker(options);
+                        _self.picker.show(function (rs) {
+                            /*
+                             * rs.value 拼合后的 value
+                             * rs.text 拼合后的 text
+                             * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                             * rs.m 月，用法同年
+                             * rs.d 日，用法同年
+                             * rs.h 时，用法同年
+                             * rs.i 分（minutes 的第二个字母），用法同年
+                             */
+                            result.innerText = '选择结果: ' + rs.text;
+
+                            if (i == 0) {
+                                var date = new Date(rs.text);
+                                ///return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                                document.getElementById('demo4').innerText = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+                            }
+                            else if (i == 1) {
+                                var date = new Date(rs.text);
+                                document.getElementById('demo5').innerText = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+                            }
+                            /*
+                             * 返回 false 可以阻止选择框的关闭
+                             * return false;
+                             */
+                            /*
+                             * 释放组件资源，释放后将将不能再操作组件
+                             * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                             * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                             * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                             */
+                            _self.picker.dispose();
+                            _self.picker = null;
+                        });
+                    }
+
+                }, false);
+            });
+
+
+        })(mui);
+
+        (function ($, doc) {
+            $.ready(function () {
+
+                //$.post("/Supplier/GetVTJson", {}, function (response) {
+               
+                var userPicker = new $.PopPicker();
+                userPicker.setData([{ value: '2', text: '中餐' }, { value: '3', text: '晚餐' }]);
+                var showUserPickerButton = doc.getElementById('showUserPicker');
+                //var userResult = doc.getElementById('vtResult');
+                var vtID = doc.getElementById('vtID');
+                showUserPickerButton.addEventListener('tap', function (event) {
+                    userPicker.show(function (items) {
+                        //alert(JSON.stringify(items[0]["text"]).replace(/"/g, ""));
+                        showUserPickerButton.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                        //userResult.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                        vtID.innerText = JSON.stringify(items[0]["value"]).replace(/"/g, "");
+                        //userResult.innerText = JSON.stringify(items[0]);
+                        //返回 false 可以阻止选择框的关闭
+                        //return false;
+                    });
+                }, false);
+                //});
+
+              
+               
+
+
+
+
+            });
+
+            $.ready(function () {
+                $.post("/Supplier/GetRJson", {}, function (response) {
+                    //alert(response);
+                    var _getParam = function (obj, param) {
+                        return obj[param] || '';
+                    };
+                    var RPicker = new $.PopPicker();
+                    RPicker.setData(eval(response));
+                    //userPicker.setData([{ value: '1', text: '热菜' }, { value: '2', text: '凉菜' }, { value: '3', text: '汤羹' }, { value: '4', text: '主食' }, { value: '5', text: '小吃' }, { value: '6', text: '饮品' }, { value: '7', text: '西餐' }, { value: '8', text: '烘焙' }, { value: '9', text: '火锅' }, { value: '10', text: '海鲜' }]);
+                    var showRPickerButton = doc.getElementById('showRPicker');
+                    var name = doc.getElementById('rname');
+                    //var userResult = doc.getElementById('vtResult');
+                    //var vtRID = doc.getElementById('vtRID');
+                    var vtRID = doc.getElementById('rGuid');
+                    //var rcity = doc.getElementById('rcity');
+                    var raddress = doc.getElementById('raddress');
+                    showRPickerButton.addEventListener('tap', function (event) {
+                        RPicker.show(function (items) {
+                            //userResult.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                            vtRID.innerText = JSON.stringify(items[0]["value"]).replace(/"/g, "");
+                            name.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                            //rcity.innerText = JSON.stringify(items[0]["F1"]).replace(/"/g, "") + JSON.stringify(items[0]["F2"]).replace(/"/g, "");
+                            raddress.innerText = JSON.stringify(items[0]["F3"]).replace(/"/g, "");
+                            //userResult.innerText = JSON.stringify(items[0]);
+                            //返回 false 可以阻止选择框的关闭
+                            //return false;
+                            var rid = JSON.stringify(items[0]["value"]).replace(/"/g, "");
+                            $.post("/Supplier/ReloadPage", { rid: rid }, function (response) {
+                                //alert(response);
+                                //var container = document.querySelector('.contentDiv');
+                                //container.innerHTML = response;
+                                window.location = "/Supplier/Index";
+                            });
+
+
+                        });
+                    }, false);
+                });
+            });
+        })(mui, document);
+
+
+        function add_click() {
+            //var eid = 111;
+            //$.post("/Supplier/AddFood", { eid: eid }, function (response) {
+            //    alert(response);
+            //});
+            alert("/Supplier/AddFood");
+            window.location = "/Supplier/AddFood";
+        }
+
+        function update_click(rguid, sguid) {
+            //var eid = 111;
+            //$.post("/Supplier/AddFood", { eid: eid }, function (response) {
+            //    alert(response);
+            //});
+            //alert(rguid + " " + sguid);
+            window.location = "/Supplier/UpdateDailyMeal?rguid=" + rguid + "&sguid=" + sguid;
+        }
+
+
+        mui("body").on('tap', '#addFood', function (event) {
+
+            //alert('进来mui.js绑定事件了');
+            window.location = "/Supplier/AddFood";
+        });
+
+        mui("body").on('tap', '#addDailyMeal', function (event) {
+
+            //alert('进来mui.js绑定事件了');
+            window.location = "/Supplier/addDailyMeal";
+        });
+
+        mui('.mui-input-group').on('change', 'input', function () {
+            var value = this.checked ? "true" : "false";
+            this.previousElementSibling.innerText = "checked：" + value;
+        });
+
+        var customBiz = {
+            init: function () {
+                var self = this;
+                // 初始化日历
+
+                var calendar = new Calendar({
+                    // swiper滑动容器
+                    container: "#calendar",
+                    // 上一月节点
+                    pre: ".pre",
+                    // 下一月节点
+                    next: ".next",
+                    // 回到今天
+                    backToToday: ".backToday",
+                    // 业务数据改变
+                    dataRequest: function (currdate, callback, _this) {
+                        // 无日程安排
+                        var data = [{
+                            "date": "2018-04-18"
+                        }, {
+                            "date": "2018-04-17"
+                        }, {
+                            "date": "2018-04-16"
+                        }];
+                        callback && callback(data);
+                    },
+                    // 点击日期事件
+                    onItemClick: function (item) {
+                        var defaultDate = item.date;
+                        // 设置标题
+                        setTitle(defaultDate);
+                        var rGuid = document.getElementById('rGuid').innerText;
+
+                        $.post("/Supplier/UpdateHtml", { defaultDate: defaultDate, rGuid: rGuid }, function (response) {
+                            //alert(response);
+                            $(".details").html(response);
+                        });
+
+
+                    },
+                    // 滑动回调
+                    swipeCallback: function (item) {
+                        var defaultDate = item.date;
+                        // 设置标题
+                        setTitle(defaultDate);
+                        var rGuid = document.getElementById('rGuid').innerText;
+                        //alert(rGuid);
+                        $.post("/Supplier/UpdateHtml", { defaultDate: defaultDate, rGuid: rGuid }, function (response) {
+                            //alert(response);
+                            $(".details").html(response);
+                        });
+                    },
+                    // 调试
+                    isDebug: false
+                });
+                // 设置标题
+                var titleNode = document.querySelector('.mid span');
+                var dateSpan = document.querySelector('.detailsP span');
+                function setTitle(date) {
+                    titleNode.innerText = date;
+                    var d = new Date(date);
+                    //alert(date);
+                    dateSpan.innerText = d.getDate() + '日';
+                }
+
+            }
+        }
+
+        // 初始化
+        customBiz.init();
+
+        //是否删除配餐
+        document.getElementById("confirmBtn").addEventListener('tap', function () {
+            var btnArray = ['否', '是'];
+            mui.confirm('是否删除该配餐，确认？', 'Hello MUI', btnArray, function (e) {
+                if (e.index == 1) {
+                    alert('是');
+                } else {
+                    alert('否');
+                }
+            })
+        });
+
+        function delete_click(rguid, sguid) {
+            var btnArray = ['否', '是'];
+            mui.confirm('是否删除该配餐，确认？', 'Hello MUI', btnArray, function (e) {
+                if (e.index == 1) {
+                    //alert('是');
+                    $.post("/Supplier/DeleteDailyMeal", { rguid: rguid, sguid: sguid }, function (response) {
+                        if( response == '删除成功')
+                        {
+                            window.location.href = "/Supplier/Index";
+                            //$(".details").html(response);
+                        }
+                        else
+                            alert('删除失败');
+                    });
+                } else {
+                    //alert('否');
+                }
+            })
+            ///window.location = "/Supplier/UpdateDailyMeal?rguid=" + rguid + "&sguid=" + sguid;
+        }
+    </script>
+</body>
+</html>

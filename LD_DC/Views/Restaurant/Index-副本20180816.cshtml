@@ -1,0 +1,1031 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>绿都订餐</title>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!-- 删除默认的苹果工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 禁止百度转码显示 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+    <link href="~/Content/muicss/mui.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/Index.css" rel="stylesheet" />
+    @*<link href="~/Content/weeks/common.css" rel="stylesheet" />
+        <link href="~/Content/weeks/reserved.css" rel="stylesheet" />*@
+
+    <style>
+        /*移除底部或顶部三角,需要在删除此代码*/
+        .mui-popover .mui-popover-arrow:after {
+            width: 0px;
+        }
+
+        #div {
+            width: 0px;
+            height: 0px;
+            background: red;
+            position: fixed;
+            top: 60%;
+            left: 50%;
+        }
+
+        #popoverDiv {
+            background-color: #f7f7f7;
+        }
+
+
+        #popoverWCDiv {
+            background-color: #f7f7f7;
+        }
+
+        .mui-popover .mui-table-view {
+            overflow: auto;
+            /*max-height: 100%;*/
+            margin-bottom: 0;
+            border-radius: 7px;
+            background-color: #f7f7f7;
+            background-image: none;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+    @*<script src="~/Scripts/weeks/preAdjust.js"></script>
+        <script src="~/Scripts/weeks/vue.js"></script>
+        <script src="~/Scripts/weeks/vue-resource.min.js"></script>*@
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jweixin-1.2.0.js"></script>
+
+    <script type="text/javascript">
+        wx.config({
+            beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '@ViewData["appId"]', // 必填，企业微信的corpID
+            timestamp:@ViewData["timestamp"] , // 必填，生成签名的时间戳
+            nonceStr: '@ViewData["noncestr"]', // 必填，生成签名的随机串
+            signature:'@ViewData["signature"]',// 必填，签名，见附录1
+            jsApiList: ['hideOptionMenu','selectEnterpriseContact','openEnterpriseChat','chooseImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function () {
+            //隐藏右上角菜单接口
+            wx.hideOptionMenu();
+        });
+
+        wx.error(function(res){
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            alert("错误提示："+res);
+        });
+
+        wx.checkJsApi({
+            jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function(res) {
+                // 以键值对的形式返回，可用的api值true，不可用为false
+                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                //alert(res);
+            }
+        });
+
+
+
+
+        //预定
+        function Collect_click(eid, etype) {
+            //alert(name);
+            var orderDate = $("#orderDate").text();
+
+            //$.post("/Restaurant/SetCollect", { eid: eid, etype: etype, orderDate: orderDate }, function (response) {
+            //    alert(response);
+            //}, "json");
+
+            $.post("/Restaurant/SetCollect", { eid: eid, etype: etype, orderDate: orderDate }, function (response) {
+                //alert(response);
+            });
+
+            //alert('ok');
+            window.location.href = window.location.href;
+
+            //window.location.href = "/LDXX/BillingList?name=";
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Restaurant/SetCollect",
+            //    data: { eid: eid, etype: etype },
+            //    success: function (sesponseTest) {
+            //        alert(name);
+            //    }
+            //});
+
+            //window.location.href = "/LDXX/BillingList?name=&editName=" + editname;
+        };
+
+        function scanQRCode_click(eid, etype,guid)
+        {
+            //alert(eid+ " " +etype + " " +guid);
+
+            wx.scanQRCode({
+                desc: 'scanQRCode desc',
+                needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function(res) {
+                    //回调
+                    //扫码后获取结果参数赋值给Input
+                    var url = res.resultStr;
+                    //商品条形码，取","后面的
+                    if(url.indexOf(",")>=0){
+                        alert('请扫描二维码')
+                    }else{
+                        $.post("/Restaurant/scanQRCode", { eid: eid, etype: etype, guid: guid, name: url }, function (response) {
+                            //alert(response);
+                            if(response == "扫描二维码成功！")
+                            {
+                                window.location.href = window.location.href;
+                            }
+
+                        });
+
+                        //alert("2、"+url);
+                    }
+                },
+                error: function(res) {
+                    if (res.errMsg.indexOf('function_not_exist') > 0) {
+                        alert('版本过低请升级')
+                    }
+                }
+            });
+        };
+
+        function takeOut_click(guid,toCount,etype)
+        {
+            var orderDate = $("#orderDate").text();
+
+            if(toCount == 0)
+            {
+                //alert('外带');
+                wx.invoke("selectEnterpriseContact", {
+                    "fromDepartmentId": -1,// 必填，-1表示打开的通讯录从自己所在部门开始展示, 0表示从最上层开始
+                    "mode": "single",// 必填，选择模式，single表示单选，multi表示多选
+                    "type": ["department", "user"],// 必填，选择限制类型，指定department、user中的一个或者多个
+                    "selectedDepartmentIds": [],// 非必填，已选部门ID列表。用于多次选人时可重入
+                    "selectedUserIds": []// 非必填，已选用户ID列表。用于多次选人时可重入
+                },function(res){
+
+                    if (res.err_msg == "selectEnterpriseContact:ok")
+                    {
+                        if(typeof res.result == 'string')
+                        {
+                            res.result = JSON.parse(res.result) //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
+                        }
+
+                        var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
+                        for (var i = 0; i < selectedDepartmentList.length; i++)
+                        {
+                            var department = selectedDepartmentList[i];
+                            var departmentId = department.id;// 已选的单个部门ID
+                            var departemntName = department.name;// 已选的单个部门名称
+
+                            alert("请选择到您的同事！");
+                        }
+                        var selectedUserList = res.result.userList; // 已选的成员列表
+                        for (var i = 0; i < selectedUserList.length; i++)
+                        {
+                            var user = selectedUserList[i];
+                            var userId = user.id; // 已选的单个成员ID
+                            var userName = user.name;// 已选的单个成员名称
+                            var userAvatar= user.avatar;// 已选的单个成员头像
+                            //alert(userId + " " +userName + " "+guid +" "+ etype+" "+orderDate);
+
+                            $.post("/Restaurant/TakeOut", { tUserID: userId, tUserName: userName, guid: guid ,etype:etype,orderDate:orderDate}, function (response) {
+                                //alert(response);
+                                if(response == userName + "帮您带饭！")
+                                {
+                                    window.location.href = window.location.href;
+                                }
+
+                            });
+
+
+                        }
+                    }
+                });
+
+            }
+            else
+            {
+                alert("已帮其他员工外带！");
+            }
+        };
+
+
+        function _careateGroup()
+        {
+            //alert("aa");
+            var h = wx.invoke || WeixinJSBridge.invoke;
+            h("openEnterpriseChat", {
+                userIds: 'LiPengFei,FengHao', // 必填，参与会话的成员列表。格式为userid1;userid2;...，用分号隔开，最大限制为2000个。userid单个时为单聊，多个时为群聊。
+                groupName: '讨论组' // 必填，会话名称。单聊时该参数传入空字符串""即可。
+            },
+            function (res)
+            {
+                if (res.errMsg.indexOf('function not exist') > -1)
+                {
+                    alert('版本过低请升级')
+                }
+            }
+            );
+        };
+
+        function scanQRCode()
+        {
+            wx.scanQRCode({
+                desc: 'scanQRCode desc',
+                needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function(res) {
+                    //回调
+                    //扫码后获取结果参数赋值给Input
+                    var url = res.resultStr;
+                    //商品条形码，取","后面的
+                    if(url.indexOf(",")>=0){
+                        var tempArray = url.split(',');
+                        var tempNum = tempArray[1];
+                        //alert("1、"+ tempArray + " " +tempNum);
+                    }else{
+                        //alert("2、"+url);
+                    }
+                },
+                error: function(res) {
+                    if (res.errMsg.indexOf('function_not_exist') > 0) {
+                        alert('版本过低请升级')
+                    }
+                }
+            });
+
+        };
+
+        function TestTakeOut_Click()
+        {
+            //alert('外带');
+            wx.invoke("selectEnterpriseContact", {
+                "fromDepartmentId": -1,// 必填，-1表示打开的通讯录从自己所在部门开始展示, 0表示从最上层开始
+                "mode": "single",// 必填，选择模式，single表示单选，multi表示多选
+                "type": ["department", "user"],// 必填，选择限制类型，指定department、user中的一个或者多个
+                "selectedDepartmentIds": [],// 非必填，已选部门ID列表。用于多次选人时可重入
+                "selectedUserIds": []// 非必填，已选用户ID列表。用于多次选人时可重入
+            },function(res){
+
+                if (res.err_msg == "selectEnterpriseContact:ok")
+                {
+                    if(typeof res.result == 'string')
+                    {
+                        res.result = JSON.parse(res.result) //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
+                    }
+
+                    var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
+                    for (var i = 0; i < selectedDepartmentList.length; i++)
+                    {
+                        var department = selectedDepartmentList[i];
+                        var departmentId = department.id;// 已选的单个部门ID
+                        var departemntName = department.name;// 已选的单个部门名称
+                    }
+                    var selectedUserList = res.result.userList; // 已选的成员列表
+                    for (var i = 0; i < selectedUserList.length; i++)
+                    {
+                        var user = selectedUserList[i];
+                        var userId = user.id; // 已选的单个成员ID
+                        var userName = user.name;// 已选的单个成员名称
+                        var userAvatar= user.avatar;// 已选的单个成员头像
+                        //alert(userName);
+                    }
+                }
+            });
+        };
+
+        function zcxq_click(vID)
+        {
+            //alert(vID);
+            window.location = "/Restaurant/DailyMeal?vID="+vID;
+        }
+
+
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <style type="text/css">
+        </style>
+        @*banner-首页banner*@
+        <div id="box">
+            <img class="bannerImg" src="~/ResImages/%e9%9b%86%e5%9b%a2%e9%a4%90%e5%8e%85.jpg" />
+            <span></span>
+        </div>
+        <div class="banner">
+            <span class="spanX"></span>
+            <span class="spanT1">
+                @*上海明基餐厅*@
+                @ViewData["rname"]
+            </span>
+            <span class="spanT2">
+                @*上海市长宁区*@
+                @ViewData["rcity"]@ViewData["rcounty"]
+            </span>
+            <span class="spanT3">
+                @*淞虹路207号明基广场B座*@
+                @ViewData["raddress"]
+            </span>
+        </div>
+        @*日期选择控件*@
+        <div class="datePicker">
+            @*<div class="zDay"></div>
+                <div class="sDay"></div>*@
+            @*<div class="dateChose">*@
+            <a>@ViewData["showOrderDate"]</a>
+            <a id="orderDate" style="display:none">@ViewData["orderDate"]</a>
+            @*</div>*@
+        </div>
+
+        @*午餐、晚餐、团餐区域*@
+        @{
+            System.Data.DataTable dt = (System.Data.DataTable)ViewData["dsDInfo"];
+            System.Data.DataTable dtOIWC = (System.Data.DataTable)ViewData["dsOI"];
+            System.Data.DataTable dtOITO = (System.Data.DataTable)ViewData["dsoito"];//转带
+
+            System.Data.DataRow[] drsZC = dtOIWC.Select("eType = '中餐' ");
+            System.Data.DataRow[] drsWC = dtOIWC.Select("eType = '晚餐' ");
+
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i]["eType"].ToString() == "中餐")
+                    {
+                        <div class="ldmDiv">
+                            <div class="lunch">
+                                <div class="imglunch"></div>
+                                <p class="p1">
+                                    @dt.Rows[i]["eType"].ToString()
+                                </p>
+                                <p class="p2">
+                                    用餐时段：@Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm")~@Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm")
+                                </p>
+                                <p class="p3" id="btnZCInfo">
+                                    想了解详细配餐情况
+                                </p>
+                            </div>
+                            @*<div class="lunchBtn">
+                                    <div class="imgreserve">
+                                        <div class="btndes">
+                                            我要预订
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*@if (drsZC.Length == 0)
+                                {
+                                    <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                        <div class="imgreserve">
+                                            <div class="btndes">
+                                                我要预订
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                        <div class="imgrSuccess">
+                                            <div class="btndes">
+                                                订餐成功
+                                            </div>
+                                        </div>
+                                    </div>
+                                }*@
+                            @if (ViewData["btnLunchState"] == "我要预订")
+                            {
+                                <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                    <div class="imgreserve">
+                                        <div class="btndes">
+                                            我要预订
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "订餐成功")
+                            {
+                                <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                    <div class="imgrSuccess">
+                                        <div class="btndes">
+                                            订餐成功
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "不可预订" || ViewData["btnLunchState"] == "未预订")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrUnscheduled">
+                                        <div class="btndes">
+                                            @ViewData["btnLunchState"]
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "扫码就餐")
+                            {
+                                <div class="lunchBtn" onclick="scanQRCode_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()','@ViewData["orderLunchGuid"].ToString()')">
+                                    <div class="imgrQRcode">
+                                        <div class="btndes">
+                                            扫码就餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "已用餐")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrFinish">
+                                        <div class="btndes">
+                                            已用餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "已转带")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrTakeOut">
+                                        <div class="btndes">
+                                            已转带
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnLunchState"] == "未用餐")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrNonMeal">
+                                        <div class="btndes">
+                                            未用餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    }
+                    else if (dt.Rows[i]["eType"].ToString() == "晚餐")
+                    {
+                        <div class="ldmDiv">
+                            <div class="dinner">
+                                <div class="imgdinner"></div>
+                                <p class="p1">
+                                    @dt.Rows[i]["eType"].ToString()
+                                </p>
+                                <p class="p2">
+                                    用餐时段：@Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm")~@Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm")
+                                </p>
+                                <p class="p3" id="btnWCInfo">
+                                    想了解详细配餐情况
+                                </p>
+                            </div>
+
+
+                            @*@if (drsWC.Length == 0)
+                                {
+                                    <div class="dinnerBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                        <div class="imgreserve">
+                                            <div class="btndes">
+                                                我要预订
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="dinnerBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                        <div class="imgrSuccess">
+                                            <div class="btndes">
+                                                订餐成功
+                                            </div>
+                                        </div>
+                                    </div>
+                                }*@
+                            @if (ViewData["btnDinnerState"] == "我要预订")
+                            {
+                                <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                    <div class="imgreserve">
+                                        <div class="btndes">
+                                            我要预订
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "订餐成功")
+                            {
+                                <div class="lunchBtn" onclick="Collect_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()')">
+                                    <div class="imgrSuccess">
+                                        <div class="btndes">
+                                            订餐成功
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "不可预订" || ViewData["btnDinnerState"] == "未预订")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrUnscheduled">
+                                        <div class="btndes">
+                                            @ViewData["btnDinnerState"]
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "扫码就餐")
+                            {
+                                <div class="lunchBtn" onclick="scanQRCode_click(@dt.Rows[i]["eID"].ToString(),'@dt.Rows[i]["eType"].ToString()','@ViewData["orderDinnerGuid"].ToString()')">
+                                    <div class="imgrQRcode">
+                                        <div class="btndes">
+                                            扫码就餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "已用餐")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrFinish">
+                                        <div class="btndes">
+                                            已用餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "已转带")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrTakeOut">
+                                        <div class="btndes">
+                                            已转带
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (ViewData["btnDinnerState"] == "未用餐")
+                            {
+                                <div class="lunchBtn">
+                                    <div class="imgrNonMeal">
+                                        <div class="btndes">
+                                            未用餐
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                }
+            }
+        }
+
+
+        @*<div class="ldmDiv">
+                <div class="meeting">
+                    <div class="imgempty"></div>
+                    <p class="p1">
+                        团餐
+                    </p>
+                    <p class="p3">
+                        想了解详细配餐情况
+                    </p>
+                </div>
+                <div class="meetingBtn">
+                    <div class="imgreserve">
+                        <div class="btndes">
+                            我要预订
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        @*详情区域*@
+        <div class="details">
+            <div class="detailsTitle">
+                <div id="rectangle">
+                    <p class="detailsP">
+                        今日订餐详情
+                    </p>
+                </div>
+            </div>
+            @{
+                System.Data.DataTable dtOI = (System.Data.DataTable)ViewData["dsOI"];
+
+
+                if (dtOI.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dtOI.Rows.Count; i++)
+                    {
+                        <div class="detailsInfo">
+                            <div id="divInfo1">
+                                @if (dtOI.Rows[i]["eType"].ToString() == "中餐")
+                                {
+                                    <div class="divZW">@dtOI.Rows[i]["eType"].ToString()券</div>
+                                }
+                                else if (dtOI.Rows[i]["eType"].ToString() == "晚餐")
+                                {
+                                    <div class="divWW">@dtOI.Rows[i]["eType"].ToString()券</div>
+                                }
+                                <p>
+                                    @dtOI.Rows[i]["rUser"].ToString()
+                                </p>
+                                @if (Convert.ToInt32(dtOI.Rows[i]["isTakeout"]) == 1)
+                                {
+                                    <div class="divWDR">
+                                        @dtOI.Rows[i]["tUser"].ToString()（带）
+                                    </div>
+                                }
+                            </div>
+                            <div id="divInfo2">
+                                <p class="info2p1">预订时间：@Convert.ToDateTime(dtOI.Rows[i]["rDate"].ToString()).ToString("HH:mm")</p>
+                                <p>
+                                    就餐时间：@if (dtOI.Rows[i]["eDate"].ToString() != String.Empty)
+                                    {
+                                        @Convert.ToDateTime(dtOI.Rows[i]["eDate"].ToString()).ToString("HH:mm");
+                                    }
+                                </p>
+                            </div>
+
+                            @if (dtOI.Rows[i]["eType"].ToString() == "中餐")
+                            {
+                                if (Convert.ToDateTime(ViewData["nowTime"].ToString()) < Convert.ToDateTime(ViewData["lunchrEndTime"].ToString()))
+                                {
+                                    if (Convert.ToInt32(dtOI.Rows[i]["isTakeout"]) == 0)
+                                    {
+                                        <div id="divInfo3" onclick="takeOut_click('@dtOI.Rows[i]["guid"].ToString()',@Convert.ToInt32(ViewData["toCount"]), '@dtOI.Rows[i]["eType"].ToString()')">
+                                            <div class="info3img">
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="divInfo3">
+                                            <div class=" infoOvertimeimg">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div id="divInfo3">
+                                        <div class=" infoOvertimeimg">
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                            else if (dtOI.Rows[i]["eType"].ToString() == "晚餐")
+                            {
+                                if (Convert.ToDateTime(ViewData["nowTime"].ToString()) < Convert.ToDateTime(ViewData["DinnerrEndTime"].ToString()))
+                                {
+                                    if (Convert.ToInt32(dtOI.Rows[i]["isTakeout"]) == 0)
+                                    {
+                                        <div id="divInfo3" onclick="takeOut_click('@dtOI.Rows[i]["guid"].ToString()',@Convert.ToInt32(ViewData["toCount"]),  '@dtOI.Rows[i]["eType"].ToString()')">
+                                            <div class="info3img">
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="divInfo3">
+                                            <div class=" infoOvertimeimg">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div id="divInfo3">
+                                        <div class=" infoOvertimeimg">
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+                    }
+                }
+            }
+
+            @{
+                System.Data.DataTable dsOITO = (System.Data.DataTable)ViewData["dsOITO"];
+
+                if (dsOITO.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dsOITO.Rows.Count; i++)
+                    {
+                        <div class="detailsInfo">
+                            <div id="divInfoWD">
+                                <div class="divZW">@dsOITO.Rows[i]["eType"].ToString()券</div>
+                                <p>
+                                    @dsOITO.Rows[i]["rUser"].ToString()
+                                </p>
+                            </div>
+                            <div id="divInfo2">
+                                <p class="info2p1">预订时间：@Convert.ToDateTime(dsOITO.Rows[i]["rDate"].ToString()).ToString("HH:mm")</p>
+                                <p>
+                                    就餐时间：@if (dsOITO.Rows[i]["eDate"].ToString() != String.Empty)
+                                    {
+                                        @Convert.ToDateTime(dsOITO.Rows[i]["eDate"].ToString()).ToString("HH:mm");
+                                    }
+                                </p>
+                            </div>
+                            <div id="divInfo3">
+                                <div class="info3imgWD">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+
+
+            @*<div class="detailsInfo">
+                    <div id="divInfoWD">
+                        <div class="divZW">早餐</div>
+                        <p>
+                            张三丰
+                        </p>
+                        <div class="divWDR">
+                            丘比特（带）
+                        </div>
+                    </div>
+                    <div id="divInfo2">
+                        <p class="info2p1">预订时间：09:33:48</p>
+                        <p>领餐时间：12:33:48</p>
+                    </div>
+                    <div id="divInfo3" onclick="scanQRCode()">
+                        <div class="info3imgWD">
+                        </div>
+                    </div>
+                </div>
+                <div class="detailsInfo">
+                    <div id="divInfoWD">
+                        <p>
+                            张三丰
+                        </p>
+                    </div>
+                    <div id="divInfo2">
+                        <p class="info2p1">预订时间：09:33:48</p>
+                        <p>领餐时间：12:33:48</p>
+                    </div>
+                    <div id="divInfo3">
+                        <div class="info3imgWD">
+                        </div>
+                    </div>
+                </div>*@
+            <div class="divhistorical">
+                <a id="history" class="ahistorical">历史订餐统计</a>
+            </div>
+        </div>
+        <div id="div"></div>
+        <div id="popoverDiv" class="mui-popover" style="width: 90%; max-height: 520px; min-height: 520px; ">
+            @*<div class="mui-popover-arrow"></div>*@
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <div>
+                        <div class="mui-card">
+                            <ul class="mui-table-view">
+                                @{
+                                    System.Data.DataTable dtSetMeal = (System.Data.DataTable)ViewData["dsSetMeal"];
+                                    System.Data.DataTable dtDailyMeal = (System.Data.DataTable)ViewData["dsDailyMeal"];
+                                    System.Data.DataRow[] drsDM = null;
+                                    System.Data.DataRow[] drsSetMeal = null;
+                                    drsSetMeal = dtSetMeal.Select("eGuid = 2 ");
+                                    bool isNow = false;
+
+                                    if (drsSetMeal.Length > 0)
+                                    {
+                                        for (int i = 0; i < drsSetMeal.Length; i++)
+                                        {
+                                            drsDM = dtDailyMeal.Select("sGuid = '" + @drsSetMeal[i]["guid"].ToString() + "' ");
+                                            var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                            var begtime = Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString());
+                                            string begW = weekdays[(int)begtime.DayOfWeek];
+                                            var endtime = Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString());
+                                            string endW = weekdays[(int)endtime.DayOfWeek];
+                                            DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+                                            //今日
+                                            if (nowdate >= Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString()))
+                                            {
+                                                if (isNow == false)
+                                                {
+                                                    <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                        <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">今日</span>
+                                                    </div>
+                                                    isNow = true;
+                                                }
+
+                                                <li class="mui-table-view-cell mui-collapse mui-active">
+                                                    <a class="mui-navigate-right" href="#">
+                                                        <b>@Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@drsSetMeal[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                                    </a>
+                                                    <div class="mui-collapse-content">
+                                                        <form class="mui-input-group">
+
+                                                            @for (int j = 0; j < drsDM.Length; j++)
+                                                            {
+                                                                <div class="mui-input-row">
+                                                                    <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                    <label>@drsDM[j]["name"].ToString()</label>
+                                                                    <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                                </div>
+
+                                                            }
+
+
+
+                                                        </form>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                            <span style="padding: 0px 0px 0px 10px; color: #8a8a8a; font-weight: bold;">今日还未配餐</span>
+                                        </div>
+                                    }
+                                }
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="popoverWCDiv" class="mui-popover" style="width: 90%; max-height: 520px; min-height: 520px; ">
+            @*<div class="mui-popover-arrow"></div>*@
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <div>
+                        <div class="mui-card">
+                            <ul class="mui-table-view">
+                                @{
+                                    dtSetMeal = (System.Data.DataTable)ViewData["dsSetMeal"];
+                                    dtDailyMeal = (System.Data.DataTable)ViewData["dsDailyMeal"];
+                                    drsDM = null;
+                                    drsSetMeal = null;
+                                    drsSetMeal = dtSetMeal.Select("eGuid = 3 ");
+                                    isNow = false;
+
+                                    if (drsSetMeal.Length > 0)
+                                    {
+                                        for (int i = 0; i < drsSetMeal.Length; i++)
+                                        {
+                                            drsDM = dtDailyMeal.Select("sGuid = '" + @drsSetMeal[i]["guid"].ToString() + "' ");
+                                            var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                            var begtime = Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString());
+                                            string begW = weekdays[(int)begtime.DayOfWeek];
+                                            var endtime = Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString());
+                                            string endW = weekdays[(int)endtime.DayOfWeek];
+                                            DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+                                            //今日
+                                            if (nowdate >= Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString()))
+                                            {
+                                                if (isNow == false)
+                                                {
+                                                    <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                        <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">今日</span>
+                                                    </div>
+                                                    isNow = true;
+                                                }
+
+                                                <li class="mui-table-view-cell mui-collapse mui-active">
+                                                    <a class="mui-navigate-right" href="#">
+                                                        <b>@Convert.ToDateTime(drsSetMeal[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(drsSetMeal[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@drsSetMeal[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                                    </a>
+                                                    <div class="mui-collapse-content">
+                                                        <form class="mui-input-group">
+
+                                                            @for (int j = 0; j < drsDM.Length; j++)
+                                                            {
+                                                                <div class="mui-input-row">
+                                                                    <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                                    <label>@drsDM[j]["name"].ToString()</label>
+                                                                    <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                                </div>
+
+                                                            }
+
+
+
+                                                        </form>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                            <span style="padding: 0px 0px 0px 10px; color: #8a8a8a; font-weight: bold;">今日还未配餐</span>
+                                        </div>
+                                    }
+                                }
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div id="middlePopover" class="mui-popover">
+            <div class="mui-popover-arrow"></div>
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <ul class="mui-table-view">
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item1</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item2</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item3</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item4</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item5</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item6</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item7</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item8</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item9</a>
+                        </li>
+                        <li class="mui-table-view-cell">
+                            <a href="#">Item10</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+        @*<div class="copyright">测试：@ViewData["code"]</div>*@
+        <script src="~/Scripts/muijs/mui.min.js"></script>
+        <script type="text/javascript">
+            mui.init({
+                //swipeBack: true //启用右滑关闭功能
+            });
+
+            mui('.mui-scroll-wrapper').scroll();
+
+            document.getElementById("history").addEventListener("tap", function() {
+                //调用隐藏/显示弹出层
+                var rguid = "";
+                window.location = "/Restaurant/History?rguid=" + rguid ;
+            });
+
+            document.getElementById("btnZCInfo").addEventListener("tap", function() {
+                //调用隐藏/显示弹出层
+                mui("#popoverDiv").popover('toggle', document.getElementById("div"));
+
+            });
+
+            document.getElementById("btnWCInfo").addEventListener("tap", function() {
+                //调用隐藏/显示弹出层
+                mui("#popoverWCDiv").popover('toggle', document.getElementById("div"));
+
+            });
+
+        </script>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绿都订餐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!-- 禁止百度转码显示 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <link href="~/Content/SupplierIndex.css" rel="stylesheet" />
+    @*<link href="~/Content/muicss/mui.min.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.picker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>*@
+    <style>
+        /*html,
+        body {
+            background-color: white;
+        }
+
+        .mui-bar .mui-pull-left .mui-icon {
+            padding-right: 5px;
+            font-size: 28px;
+        }
+
+        .mui-bar .mui-btn {
+            font-weight: normal;
+            font-size: 17px;
+        }
+
+        .mui-bar .mui-btn-link {
+            top: 1px;
+        }
+
+        .mui-bar .mui-title {
+            background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); 
+            background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); 
+            background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); 
+            background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+            background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); 
+            color: white;
+        }
+
+        .mui-bar-nav {
+            background-color: #fdd71e;
+        }
+
+            .mui-bar-nav.mui-bar .mui-icon {
+                background-color: #dc38a0;
+            }
+
+        .mui-table-view .mui-media-object {
+            line-height: 42px;
+            max-width: 84px;
+            height: 42px;
+        }
+
+        .mui-btn-block {
+            padding-top: 1rem;
+            color: rgb(64,64,64);
+            font-size: 1.0rem;
+            font-weight: bold;
+            display: block;
+            padding: 0;
+        }
+
+        .mui-btn, button, input[type=button], input[type=reset], input[type=submit] {
+            border: none;
+        }*/
+    </style>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script type="text/javascript">
+        //function add_click() {
+        //    //var eid = 111;
+        //    //$.post("/Supplier/AddFood", { eid: eid }, function (response) {
+        //    //    alert(response);
+        //    //});
+        //    alert("/Supplier/AddFood");
+        //    window.location = "/Supplier/AddFood";
+        //}
+
+
+    </script>
+
+</head>
+<body>
+
+    @*<header id="header" class="mui-bar mui-bar-nav ">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+    <h1 class="mui-title">@ViewData["rname"] | @ViewData["raddress"]</h1>
+    <a class="mui-icon mui-icon-bars mui-pull-right"></a>
+    </header>*@
+
+    @*<div class="mui-content">*@
+
+        @*<div>*@
+
+            @*<div id="item2" class="mui-control-content mui-active">*@
+
+                @*<button id='demo4' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">选择日期 ...</button>*@
+                <div class="mui-card"> @*style="margin-bottom: 50px;"*@
+                    @*<form class="mui-input-group">*@
+                    <ul class="mui-table-view">
+                        @{
+                            System.Data.DataTable dtSetMeal = (System.Data.DataTable)ViewData["dsSetMeal"];
+                            System.Data.DataTable dtDailyMeal = (System.Data.DataTable)ViewData["dsDailyMeal"];
+                            System.Data.DataRow[] drsDM = null;
+                            bool isNow = false;
+                            bool isFuture = false;
+                            bool isHistory = false;
+
+                            if (dtSetMeal.Rows.Count > 0)
+                            {
+                                for (int i = 0; i < dtSetMeal.Rows.Count; i++)
+                                {
+                                    drsDM = dtDailyMeal.Select("sGuid = '" + @dtSetMeal.Rows[i]["guid"].ToString() + "' ");
+                                    var weekdays = new string[] { "日", "一", "二", "三", "四", "五", "六" };
+                                    var begtime = Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString());
+                                    string begW = weekdays[(int)begtime.DayOfWeek];
+                                    var endtime = Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString());
+                                    string endW = weekdays[(int)endtime.DayOfWeek];
+                                    DateTime nowdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+                                    //今日
+                                    if (nowdate >= Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()) && nowdate <= Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()))
+                                    {
+                                        if (isNow == false)
+                                        {
+                                            <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                                <span style="padding: 0px 0px 0px 10px; color: #dc38a0; font-weight: bold;">今日</span>
+                                            </div>
+                                            isNow = true;
+                                        }
+
+                                        <li class="mui-table-view-cell mui-collapse mui-active">
+                                            <a class="mui-navigate-right" href="#">
+                                                <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["begDate"].ToString()).ToString("M月d日")</b> 周@(begW) - <b>@Convert.ToDateTime(dtSetMeal.Rows[i]["endDate"].ToString()).ToString("M月d日")</b> 周@(endW) <b>@dtSetMeal.Rows[i]["eType"].ToString()</b><span class="mui-badge mui-badge-primary">@drsDM.Length</span>
+                                            </a>
+                                            <div class="mui-collapse-content">
+                                                <form class="mui-input-group">
+
+                                                    @for (int j = 0; j < drsDM.Length; j++)
+                                                    {
+                                                        <div class="mui-input-row">
+                                                            <label style="color:#007aff;">@drsDM[j]["vtName"].ToString()</label>
+                                                            <label>@drsDM[j]["name"].ToString()</label>
+                                                            <img style="width: 48px; height: 35px; float: right; margin-top: 2px; margin-right: 2px" src="@drsDM[j]["imgPath"].ToString()">
+
+                                                        </div>
+
+                                                    }
+
+
+
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div style="margin: 0px 0px 10px 0px;padding-top:10px;">
+                                    <span style="padding: 0px 0px 0px 10px; color: #8a8a8a; font-weight: bold;">今日还未配餐</span>
+                                </div>
+                            }
+                        }
+                     
+                    </ul>
+                  
+                </div>
+
+            @*</div>*@
+
+
+        @*</div>*@
+    @*</div>*@
+    <div id='vtID' class="ui-alert" style="display:none"></div>
+    <div id='result' class="ui-alert"></div>
+   
+
+
+
+    <script src="~/Scripts/muijs/mui.min.js"></script>
+
+    <script type="text/javascript">
+        mui.init({
+            swipeBack: true //启用右滑关闭功能
+        });
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

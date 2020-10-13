@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html >
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Daochu</title>
+    <script src="~/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <script src="~/Scripts/My97DatePicker/config.js"></script>
+    <script src="~/Scripts/My97DatePicker/calendar.js"></script>
+    <link href="~/Scripts/My97DatePicker/skin/WdatePicker.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <h1 style="background-color:yellow;text-align:center"><span id="rname">员工订餐台账导出</span> </h1>
+    <div style="padding-left:100px;">
+        @*<label>类型</label>
+        <select id="Select1" style="width:150px;height:30px">
+            <option value="0">--全部--</option>
+            <option value="7B050219-0919-452C-BB76-A762354A2BCA">国宝餐厅</option>
+            <option value="52897487-4396-4213-BAC4-EFF396AFBE2E">河风雅叙餐厅</option>
+            <option value="157EC53E-96F4-49ED-8ED1-54CC92FF5E63">洛阳府餐厅</option>
+            <option value="85DDAC71-7049-4AD3-A7F8-9560850C0D71">青云赋餐厅</option>
+            <option value="792E59E8-8A9C-4E19-9EBA-E8970DA20E7F">上海明基餐厅</option>
+            <option value="623C926E-58A0-41D1-92EC-3327CE26E8DB">王城里餐厅</option>
+            <option value="B11C8996-4403-40BB-BCF2-156963C98635">郑州员工食堂</option>
+        
+        </select>*@
+        <div style="float:left;margin-right:5px">
+            <label>餐厅名称 </label>
+        </div>
+        <div style="width: 150px; height: 200px; border: solid 1px; float: left;">
+            <div style="float:left">
+                <input id="Check1" style="width: 20px;margin-bottom:10px;margin-top:10px" type="checkbox" value="7B050219-0919-452C-BB76-A762354A2BCA" /> 国宝餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check2" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="52897487-4396-4213-BAC4-EFF396AFBE2E" />河风雅叙餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check3" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="157EC53E-96F4-49ED-8ED1-54CC92FF5E63" />洛阳府餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check4" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="85DDAC71-7049-4AD3-A7F8-9560850C0D71" />青云赋餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check5" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="792E59E8-8A9C-4E19-9EBA-E8970DA20E7F" />上海明基餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check6" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="623C926E-58A0-41D1-92EC-3327CE26E8DB" />王城里餐厅
+            </div>
+            <div style="float: left">
+                <input id="Check7" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="B11C8996-4403-40BB-BCF2-156963C98635" />郑州员工食堂
+            </div>
+        </div>
+
+
+        <label style="margin-left:50px;">关键字</label>
+        <input style="height:25px;width:150px;" class="text" type="text" id="user" name="UserName"  placeholder="登录名/姓名" />
+
+        <label style="margin-left:50px;">开始日期</label>
+        <input style="height:25px;width:150px;" class="Wdate" type="text" id="d16" name="Startdate" onfocus="WdatePicker()" />
+        <label style="margin-left:50px;">结束日期</label>
+        <input style="height:25px;width:150px;" class="Wdate" type="text" id="d17" name="Enddate" onfocus="WdatePicker()" />
+        <input id="Button1" style="height:30px;width:70px;margin-left:50px;" type="button" onclick="Daochu()" value="导出" />
+    </div>
+    <h1 style="background-color:yellow;text-align:center;margin-top:200px"><span id="rname">餐厅就餐明细</span> </h1>
+    <div style=" padding-left: 100px;">
+
+        <div style="float:left;margin-right:5px">
+            <label>餐厅名称 </label>
+            </div>
+            <div style="width: 150px; height: 200px; border: solid 1px; float: left;">
+                <div style="float:left">
+                    <input id="Checkbox1" style="width: 20px;margin-bottom:10px;margin-top:10px" type="checkbox" value="7B050219-0919-452C-BB76-A762354A2BCA" /> 国宝餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox2" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="52897487-4396-4213-BAC4-EFF396AFBE2E" />河风雅叙餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox3" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="157EC53E-96F4-49ED-8ED1-54CC92FF5E63" />洛阳府餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox4" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="85DDAC71-7049-4AD3-A7F8-9560850C0D71" />青云赋餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox5" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="792E59E8-8A9C-4E19-9EBA-E8970DA20E7F" />上海明基餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox6" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="623C926E-58A0-41D1-92EC-3327CE26E8DB" />王城里餐厅
+                </div>
+                <div style="float: left">
+                    <input id="Checkbox7" style="width: 20px; margin-bottom: 10px;" type="checkbox" value="B11C8996-4403-40BB-BCF2-156963C98635" />郑州员工食堂
+                </div>
+            </div>
+     
+       <div style="float:left">
+           <label style="margin-left:50px;">开始日期</label>
+           <input style="height:25px;width:150px;" class="Wdate" type="text" id="d18" name="Startdate" onfocus="WdatePicker()" />
+       </div>
+       <div style="float:left">
+           <label style="margin-left:50px;">结束日期</label>
+           <input style="height:25px;width:150px;" class="Wdate" type="text" id="d19" name="Enddate" onfocus="WdatePicker()" />
+       </div>
+     
+        <input id="Button1"  style="height:30px;width:70px;margin-left:50px;" type="button" onclick="DaochuCT()" value="导出" />
+    </div>
+
+</body>
+</html>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    function Daochu() {
+        var time1 = $("#d16").val();
+        var time2 = $("#d17").val();
+        var username = $("#user").val();
+        var ids = $('input[type=checkbox]');
+        var data = '';
+        ids.each(function () {
+            //获取当前元素的勾选状态
+            if ($(this).prop("checked")) {
+                data = data + "'" + $(this).val() + "',";
+            }
+        });
+        //去最后的点
+        data = data.substring(0, data.length - 1);
+        location.href = "/Manage/Excel?time1="+time1+"&user="+username+"&time2="+time2+"&st="+data+"";
+    }
+    function DaochuCT() {
+        var ids = $('input[type=checkbox]');
+        var data = '';
+        ids.each(function () {
+            //获取当前元素的勾选状态
+            if ($(this).prop("checked")) {
+                data = data+"'" + $(this).val() + "',";
+            }
+        });
+        //去最后的点
+        data = data.substring(0, data.length - 1);
+        var start = $("#d18").val();
+        var end = $("#d19").val();
+
+        location.href = "/Manage/ExcelCT?data="+data+"&start="+start+"&end="+end+"";
+    }
+
+
+</script>

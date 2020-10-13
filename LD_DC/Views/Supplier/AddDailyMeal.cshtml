@@ -1,0 +1,435 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绿都订餐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!-- 禁止百度转码显示 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <link href="~/Content/SupplierIndex.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.min.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.picker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>
+    <style>
+        html,
+        body {
+            background-color: #efeff4;
+        }
+
+        .mui-bar .mui-pull-left .mui-icon {
+            padding-right: 5px;
+            font-size: 28px;
+        }
+
+        .mui-bar .mui-btn {
+            font-weight: normal;
+            font-size: 17px;
+        }
+
+        .mui-bar .mui-btn-link {
+            top: 1px;
+        }
+
+        .mui-bar .mui-title {
+            background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Opera 11.1 - 12.0 */
+            background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Firefox 3.6 - 15 */
+            background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Safari 5.1 - 6.0 */
+            background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+            background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* 标准的语法（必须放在最后）*/
+            color: white;
+        }
+
+        .mui-bar-nav {
+            background-color: #fdd71e;
+        }
+
+            .mui-bar-nav.mui-bar .mui-icon {
+                background-color: #dc38a0;
+            }
+
+        .mui-table-view .mui-media-object {
+            line-height: 42px;
+            max-width: 84px;
+            height: 42px;
+        }
+
+        .mui-btn-block {
+            padding-top: 1rem;
+            color: rgb(64,64,64);
+            font-size: 1.0rem;
+            font-weight: bold;
+            display: block;
+            padding: 0;
+        }
+
+        .mui-btn, button, input[type=button], input[type=reset], input[type=submit] {
+            border: none;
+        }
+    </style>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script type="text/javascript">
+        //function add_click() {
+        //    //var eid = 111;
+        //    //$.post("/Supplier/AddFood", { eid: eid }, function (response) {
+        //    //    alert(response);
+        //    //});
+        //    alert("/Supplier/AddFood");
+        //    window.location = "/Supplier/AddFood";
+        //}
+
+
+    </script>
+
+</head>
+<body>
+
+    <header id="header" class="mui-bar mui-bar-nav ">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+        <h1 class="mui-title">@ViewData["rname"] | @ViewData["raddress"]</h1>
+        @*<a class="mui-icon mui-icon-bars mui-pull-right"></a>*@
+    </header>
+    <nav class="mui-bar mui-bar-tab">
+        <a id="ContinueAdd" class="mui-tab-item" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-plusempty"></span>
+            <span class="mui-tab-label">保存并继续添加</span>
+        </a>
+        <a id="upload" class="mui-tab-item" href="javascript:void(0)" style="background-color: #fdd71e">
+            <span class="mui-icon mui-icon-upload"></span>
+            <span class="mui-tab-label">保存</span>
+        </a>
+    </nav>
+
+    <div class="mui-content">
+
+
+
+        <div class="mui-card">
+            <form class="mui-input-group">
+                <div class="choosDate" style="">
+                    <div class="dateSpan"><div id='demo4' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">@ViewData["begDate"] </div></div> <div id="begtime" class="weekSpan">周@(ViewData["begDay"])</div><div class="dateSpan">
+                        -
+                    </div><div class="dateSpan">
+                        <div id='demo5' data-options='{"type":"date"}' class="btn mui-btn mui-btn-block">@ViewData["endDate"] </div>
+                    </div> <div id="endtime" class="weekSpan">周@(ViewData["endDay"])</div>
+                    <div class="typeSpan"><div id='showUserPicker' class="mui-btn mui-btn-block" type='button'>中餐</div></div>
+                </div>
+                @{
+                    string type = String.Empty;
+                    System.Data.DataTable dt = (System.Data.DataTable)ViewData["dsMenuInfo"];
+                    System.Data.DataTable dtType = (System.Data.DataTable)ViewData["zd_VegetableType"];
+
+                    if (dtType.Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dtType.Rows.Count; j++)
+                        {
+                            System.Data.DataRow[] drsMenu = dt.Select("vtID = '" + dtType.Rows[j]["vtID"].ToString() + "' ");
+                            if (drsMenu.Length > 0)
+                            {
+                                <div style="margin: 10px 0px 10px 0px;">
+                                    <span style="padding: 0px 0px 0px 10px; color: #007aff;font-weight:bold;">@dtType.Rows[j]["vtName"].ToString()</span>
+                                </div>
+                                for (int i = 0; i < drsMenu.Length; i++)
+                                {
+                                    <div class="mui-input-row mui-checkbox">
+                                        <label>@drsMenu[i]["name"].ToString()</label>
+                                        <input class="rds" name="checkbox1" value="@drsMenu[i]["guid"].ToString()" type="checkbox">
+                                    </div>
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @*<div class="mui-input-row mui-checkbox">
+                    <label>checked：false</label>
+                    <input name="checkbox1" value="Item 3" type="checkbox">
+                </div>
+                <div class="mui-input-row mui-checkbox">
+                    <label>checked：true</label>
+                    <input name="checkbox1" value="Item 4" type="checkbox" checked>
+                </div>
+                <div class="mui-input-row mui-checkbox mui-disabled">
+                    <label>disabled checkbox</label>
+                    <input name="checkbox1" type="checkbox" disabled="disabled">
+                </div>*@
+            </form>
+        </div>
+
+
+
+
+    </div>
+
+    <div id='vtResult' class="ui-alert" style="display:none">中餐</div>
+    <div id='vtID' class="ui-alert" style="display:none">2</div>
+    <div id='begDateDiv' class="ui-alert" style="display:none">@ViewData["shortBegDate"]</div>
+    <div id='endDateDiv' class="ui-alert" style="display:none">@ViewData["shortEndDate"]</div>
+    <div id='result' class="ui-alert"></div>
+
+
+
+
+
+    <script src="~/Scripts/muijs/mui.min.js"></script>
+    <script src="~/Scripts/muijs/mui.picker.min.js"></script>
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>
+    <script type="text/javascript">
+        mui.init({
+            swipeBack: true //启用右滑关闭功能
+        });
+
+        //日期控件
+        (function ($) {
+            $.init();
+            var result = $('#result')[0];
+            var btns = $('.btn');
+
+            btns.each(function (i, btn) {
+                btn.addEventListener('tap', function () {
+                    var _self = this;
+                    if (_self.picker) {
+                        _self.picker.show(function (rs) {
+                            result.innerText = '选择结果: ' + rs.text;
+
+                            _self.picker.dispose();
+                            _self.picker = null;
+                        });
+                    } else {
+                        var optionsJson = this.getAttribute('data-options') || '{}';
+                        var options = JSON.parse(optionsJson);
+                        var id = this.getAttribute('id');
+                        /*
+                         * 首次显示时实例化组件
+                         * 示例为了简洁，将 options 放在了按钮的 dom 上
+                         * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                         */
+                        _self.picker = new $.DtPicker(options);
+                        _self.picker.show(function (rs) {
+                            /*
+                             * rs.value 拼合后的 value
+                             * rs.text 拼合后的 text
+                             * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                             * rs.m 月，用法同年
+                             * rs.d 日，用法同年
+                             * rs.h 时，用法同年
+                             * rs.i 分（minutes 的第二个字母），用法同年
+                             */
+                            result.innerText = '选择结果: ' + rs.text;
+
+                            if (i == 0) {
+                                var date = new Date(rs.text);
+                                ///return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                                document.getElementById('demo4').innerText = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+                                document.getElementById('begDateDiv').innerText = rs.text;
+
+                                var myddy=new Date(rs.text).getDay();//获取存储当前日期
+                                var weekday = ["日", "一", "二", "三", "四", "五", "六"];
+                                document.getElementById('begtime').innerText = "周" + weekday[myddy];
+
+                                //document.getElementById("demo4").value = rs.text;
+                                //var year = date.getFullYear();
+                                //var  month = date.getMonth();
+                                //var day = date.getDate();
+                                //alert(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+                 
+
+                                
+
+
+                            }
+                            else if (i == 1) {
+                                var date = new Date(rs.text);
+                                document.getElementById('demo5').innerText = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+                                document.getElementById('endDateDiv').innerText = rs.text;
+
+                                var myddy = new Date(rs.text).getDay();//获取存储当前日期
+                                var weekday = ["日", "一", "二", "三", "四", "五", "六"];
+                                document.getElementById('endtime').innerText = "周" + weekday[myddy];
+
+
+                            }
+                            /*
+                             * 返回 false 可以阻止选择框的关闭
+                             * return false;
+                             */
+                            /*
+                             * 释放组件资源，释放后将将不能再操作组件
+                             * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                             * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                             * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                             */
+                            _self.picker.dispose();
+                            _self.picker = null;
+                        });
+                    }
+
+                }, false);
+            });
+
+            //document.getElementById("demo4").addEventListener('tap', function () {
+            //    //var dtpicker = new mui.DtPicker({
+            //    //    "type": "date",
+            //    //    "value": date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            //    //})
+            //    dtpicker.show(function (rs) {
+            //        //mui.alert(rs.text);
+            //        document.getElementById("demo4").value = rs.text;
+            //    })
+            //}, false);
+
+
+        })(mui);
+
+        //菜品类型
+        (function ($, doc) {
+            $.ready(function () {
+
+                //$.post("/Supplier/GetVTJson", {}, function (response) {
+
+                var userPicker = new $.PopPicker();
+                userPicker.setData([{ value: '2', text: '中餐' }, { value: '3', text: '晚餐' }]);
+                var showUserPickerButton = doc.getElementById('showUserPicker');
+                var vtResult = doc.getElementById('vtResult');
+                var vtID = doc.getElementById('vtID');
+                showUserPickerButton.addEventListener('tap', function (event) {
+                    userPicker.show(function (items) {
+                        //alert(JSON.stringify(items[0]["text"]).replace(/"/g, ""));
+                        showUserPickerButton.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                        vtResult.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                        vtID.innerText = JSON.stringify(items[0]["value"]).replace(/"/g, "");
+                        //userResult.innerText = JSON.stringify(items[0]);
+                        //返回 false 可以阻止选择框的关闭
+                        //return false;
+                    });
+                }, false);
+                //});
+            });
+        })(mui, document);
+
+        //菜品选择
+        mui('.mui-input-group').on('change', 'input', function () {
+            //var value = this.checked ? "true" : "false";
+            //this.previousElementSibling.innerText = "checked：" + value;
+            getVals();
+        });
+
+        function getVals() {
+            var res = getCheckBoxRes('rds');
+            if (res.length < 1) {
+                mui.toast('请选择');
+                return;
+            }
+            mui.toast(res);
+            return res;
+        }
+        function getCheckBoxRes(className) {
+            var rdsObj = document.getElementsByClassName(className);
+            var checkVal = new Array();
+            var k = 0;
+            for (i = 0; i < rdsObj.length; i++) {
+                if (rdsObj[i].checked) {
+                    checkVal[k] = rdsObj[i].value;
+                    k++;
+                }
+            }
+            return checkVal;
+        }
+
+        //保存
+        mui("body").on('tap', '#upload', function (event) {
+            var vtID = 2;
+            var vtName = "中餐";
+            var begDate = document.getElementById('begDateDiv').innerText;
+            var endDate = document.getElementById('endDateDiv').innerText;
+            var arrGuid = getVals();
+
+            //alert(begDate);
+            if (new Date(begDate) > new Date(endDate))
+            {
+                alert("开始时间不能大于结束时间！");
+                return;
+            }
+            //alert("过去了啊");
+
+            if ($("#vtID").html().replace(/"/g, "") != "" && $("#vtResult").html().replace(/"/g, "") != "") {
+                vtID = $("#vtID").html().replace(/"/g, "");
+                vtName = $("#vtResult").html().replace(/"/g, "");
+                alert(vtID + " " + vtName);
+            }
+            else {
+                //alert($("#vtID").html().replace(/"/g, "") + " " + $("#vtResult").html().replace(/"/g, ""));
+                alert("请选择菜品类型！");
+                return;
+            }
+
+            //begDate = document.getElementById('begDateDiv').innerText;
+            //endDate = document.getElementById('endDateDiv').innerText;
+            //alert(vtID + " " + vtName + " " + begDate + " " + endDate + " " + arrGuid);
+
+            var strArr = arrGuid.join(",");
+
+            $.post("/Supplier/UploadDailyMeal", { vtID: vtID, vtName: vtName, begDate: begDate, endDate: endDate, arrGuid: strArr }, function (response) {
+                alert(response);
+                if (response == "配菜成功！")
+                {
+                    window.location.href = "/Supplier/Index";
+                }
+            });
+        });
+
+        //继续添加
+        mui("body").on('tap', '#ContinueAdd', function (event) {
+            var vtID = 2;
+            var vtName = "中餐";
+            var begDate = document.getElementById('begDateDiv').innerText;
+            var endDate = document.getElementById('endDateDiv').innerText;
+            var arrGuid = getVals();
+
+            //alert(begDate);
+            if (new Date(begDate) > new Date(endDate)) {
+                alert("开始时间不能大于结束时间！");
+                return;
+            }
+            //alert("过去了啊");
+
+            if ($("#vtID").html().replace(/"/g, "") != "" && $("#vtResult").html().replace(/"/g, "") != "") {
+                vtID = $("#vtID").html().replace(/"/g, "");
+                vtName = $("#vtResult").html().replace(/"/g, "");
+                alert(vtID + " " + vtName);
+            }
+            else {
+                //alert($("#vtID").html().replace(/"/g, "") + " " + $("#vtResult").html().replace(/"/g, ""));
+                alert("请选择菜品类型！");
+                return;
+            }
+
+            //begDate = document.getElementById('begDateDiv').innerText;
+            //endDate = document.getElementById('endDateDiv').innerText;
+            //alert(vtID + " " + vtName + " " + begDate + " " + endDate + " " + arrGuid);
+
+            var strArr = arrGuid.join(",");
+
+            $.post("/Supplier/UploadDailyMeal", { vtID: vtID, vtName: vtName, begDate: begDate, endDate: endDate, arrGuid: strArr }, function (response) {
+                alert(response);
+                if (response == "配菜成功！") {
+                    window.location.href = "/Supplier/AddDailyMeal";
+                }
+            });
+        });
+        
+</script>
+</body>
+</html>

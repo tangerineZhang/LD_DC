@@ -1,0 +1,519 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>绿都订餐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link href="~/Content/muicss/mui.min.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.picker.css" rel="stylesheet" />
+    <link href="~/Content/muicss/mui.poppicker.css" rel="stylesheet" />
+    <style>
+        html,
+        body {
+            background-color: #efeff4;
+        }
+
+        .mui-bar .mui-pull-left .mui-icon {
+            padding-right: 5px;
+            font-size: 28px;
+        }
+
+        .mui-bar .mui-btn {
+            font-weight: normal;
+            font-size: 17px;
+        }
+
+        .mui-bar .mui-btn-link {
+            top: 1px;
+        }
+
+        .mui-bar .mui-title {
+            background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Opera 11.1 - 12.0 */
+            background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Firefox 3.6 - 15 */
+            background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Safari 5.1 - 6.0 */
+            background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+            background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* 标准的语法（必须放在最后）*/
+            color: white;
+        }
+
+        .mui-bar-nav {
+            background-color: #fdd71e;
+        }
+
+            .mui-bar-nav.mui-bar .mui-icon {
+                background-color: #dc38a0;
+            }
+
+        .mui-input-group {
+            margin: 20px 0px 0px 0px;
+        }
+
+
+        /*图片显示*/
+        .weui-uploader__bd {
+            margin-bottom: 0px;
+            margin-right: 0px;
+            overflow: hidden;
+        }
+
+        .weui-uploader__files {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .weui-uploader__file {
+            float: left;
+            margin-right: 9px;
+            margin-left: 9px;
+            margin-bottom: 9px;
+            width: 79px;
+            height: 79px;
+            background: no-repeat center center;
+            background-size: cover;
+        }
+
+        .weui-uploader__file_status {
+            position: relative;
+        }
+
+            .weui-uploader__file_status:before {
+                content: " ";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+
+            .weui-uploader__file_status .weui-uploader__file-content {
+                display: block;
+            }
+
+        .weui-uploader__file-content {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            color: #FFFFFF;
+        }
+
+            .weui-uploader__file-content .weui-icon-warn {
+                display: inline-block;
+            }
+
+        .weui-uploader__input-box {
+            float: left;
+            position: relative;
+            margin-right: 9px;
+            margin-bottom: 9px;
+            width: 77px;
+            height: 77px;
+            border: 1px solid #D9D9D9;
+        }
+
+            .weui-uploader__input-box:before,
+            .weui-uploader__input-box:after {
+                content: " ";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                background-color: #D9D9D9;
+            }
+
+            .weui-uploader__input-box:before {
+                width: 2px;
+                height: 39.5px;
+            }
+
+            .weui-uploader__input-box:after {
+                width: 39.5px;
+                height: 2px;
+            }
+
+            .weui-uploader__input-box:active {
+                border-color: #999999;
+            }
+
+                .weui-uploader__input-box:active:before,
+                .weui-uploader__input-box:active:after {
+                    background-color: #999999;
+                }
+    </style>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jweixin-1.2.0.js"></script>
+    <script src="~/Scripts/ak.js"></script>
+
+    <script type="text/javascript">
+        wx.config({
+            beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '@ViewData["appId"]', // 必填，企业微信的corpID
+            timestamp:@ViewData["timestamp"] , // 必填，生成签名的时间戳
+            nonceStr: '@ViewData["noncestr"]', // 必填，生成签名的随机串
+            signature:'@ViewData["signature"]',// 必填，签名，见附录1
+            jsApiList: ['hideOptionMenu','selectEnterpriseContact','openEnterpriseChat','chooseImage','getLocalImgData','uploadImage',] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function () {
+            //隐藏右上角菜单接口
+            wx.hideOptionMenu();
+        });
+
+        wx.error(function(res){
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            alert("错误提示："+res);
+        });
+
+        wx.checkJsApi({
+            jsApiList: ['getLocalImgData'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function(res) {
+                // 以键值对的形式返回，可用的api值true，不可用为false
+                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                //alert(res);
+            }
+        });
+
+
+    </script>
+
+</head>
+<body>
+
+    <header id="header" class="mui-bar mui-bar-nav ">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+        <h1 class="mui-title">@ViewData["rname"] | @ViewData["raddress"]</h1>
+        @*<a class="mui-icon mui-icon-bars mui-pull-right"></a>*@
+    </header>
+    <nav class="mui-bar mui-bar-tab">
+        <a id="ContinueAdd" class="mui-tab-item" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-plusempty"></span>
+            <span class="mui-tab-label">保存并继续添加</span>
+        </a>
+        <a id="upload" class="mui-tab-item" href="javascript:void(0)" style="background-color: #fdd71e">
+            <span class="mui-icon mui-icon-upload"></span>
+            <span class="mui-tab-label">保存</span>
+        </a>
+    </nav>
+    <div class="mui-content">
+
+
+        <form class="mui-input-group">
+            <div class="mui-input-row">
+                <label>名称</label>
+                <input id="inputName" type="text" class="mui-input-clear" placeholder="带输入菜品名称">
+            </div>
+        </form>
+        <form class="mui-input-group">
+            <div class="mui-input-row" style="height:125px;">
+                <label>简介</label>
+                <textarea id="txtDescribe" rows="5" placeholder="带输入菜品简介"></textarea>
+            </div>
+        </form>
+        <form class="mui-input-group">
+            <button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>菜品类型 ...</button>
+            <div id='vtResult' class="ui-alert" style="display: block;text-align:center;padding-bottom:9px;"></div>
+            <div id='vtID' class="ui-alert" style="display:none"></div>
+        </form>
+        <form class="mui-input-group">
+            <button id='addImage' class="mui-btn mui-btn-block" type='button'>上传图片 ...</button>
+            <div id='imgResult' class="ui-alert" style="display: none"></div>
+            <div class="weui-uploader__bd">
+                <ul class="weui-uploader__files" id="imgUl">
+                    @*<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(/FoodImages/WeChat-20180727141619967.jpg)"></li>*@
+                    <li class="weui-uploader__file weui-uploader__file_status" style="background-image: url()"></li>
+
+                
+                </ul>
+                @*<div class="weui-uploader__input-box" id="addImgBtn">*@
+                    <div class="weui-uploader__input-box" id="addImgBtn" onclick="showNativeActionSheet()">
+                    </div>
+                </div>
+        </form>
+    </div>
+
+
+    <script src="~/Scripts/muijs/mui.min.js"></script>
+    <script src="~/Scripts/muijs/mui.picker.js"></script>
+    <script src="~/Scripts/muijs/mui.poppicker.js"></script>
+    <script src="~/Scripts/webView.js"></script>
+    <script type="text/javascript">
+        (function ($, doc) {
+            $.init();
+            $.ready(function () {
+
+                $.post("/Supplier/GetVTJson", {}, function (response) {
+                    //alert(response);
+                    var _getParam = function (obj, param) {
+                        return obj[param] || '';
+                    };
+                    var userPicker = new $.PopPicker();
+                    userPicker.setData(eval(response));
+                    //userPicker.setData([{ value: '1', text: '热菜' }, { value: '2', text: '凉菜' }, { value: '3', text: '汤羹' }, { value: '4', text: '主食' }, { value: '5', text: '小吃' }, { value: '6', text: '饮品' }, { value: '7', text: '西餐' }, { value: '8', text: '烘焙' }, { value: '9', text: '火锅' }, { value: '10', text: '海鲜' }]);
+                    var showUserPickerButton = doc.getElementById('showUserPicker');
+                    var userResult = doc.getElementById('vtResult');
+                    var vtID = doc.getElementById('vtID');
+                    showUserPickerButton.addEventListener('tap', function (event) {
+                        userPicker.show(function (items) {
+                            userResult.innerText = JSON.stringify(items[0]["text"]).replace(/"/g, "");
+                            vtID.innerText = JSON.stringify(items[0]["value"]).replace(/"/g, "");
+                            //userResult.innerText = JSON.stringify(items[0]);
+                            //返回 false 可以阻止选择框的关闭
+                            //return false;
+                        });
+                    }, false);
+                });
+            });
+        })(mui, document);
+
+        mui("body").on('tap', '#upload', function (event) {
+            var vtID = $("#vtID").html().replace(/"/g, "");
+            var vtName = $("#vtResult").html().replace(/"/g, "");
+
+            var name = mui("#inputName")[0].value;
+            var describe = mui("#txtDescribe")[0].value;
+            var imgPath =$("#imgResult").html().replace(/"/g, "");
+            //alert(vtID + " " + vtName + " " + name+ " " +describe+" "+imgPath);
+            if(name == "")
+            {
+                toast("请输入菜品名称！");
+                return;
+            }
+            if(vtID == "")
+            {
+                toast("请选择菜品类型！");
+                return;
+            }
+            //if(imgPath == "")
+            //{
+            //    alert("请上传菜品图片！");
+            //    return;
+            //}
+            $.post("/Supplier/AddFood", { vtID: vtID, vtName: vtName, name: name, describe: describe,imgPath:imgPath }, function (response) {
+                alert(response);
+            });
+
+
+            window.location = "/Supplier/Index";
+        });
+
+        mui("body").on('tap', '#ContinueAdd', function (event) {
+            var vtID = $("#vtID").html().replace(/"/g, "");
+            var vtName = $("#vtResult").html().replace(/"/g, "");
+
+            var name = mui("#inputName")[0].value;
+            var describe = mui("#txtDescribe")[0].value;
+            var imgPath = $("#imgResult").html().replace(/"/g, "");
+            toast(imgPath);
+            //alert(vtID + " " + vtName + " " + name+ " " +describe+" "+imgPath);
+            if(name == "")
+            {
+                toast("请输入菜品名称！");
+                alert(imgPath);
+                return;
+            }
+            if(vtID == "")
+            {
+                toast("请选择菜品类型！");
+                return;
+            }
+            if(imgPath == "")
+            {
+                toast("请上传菜品图片！");
+                return;
+            }
+            $.post("/Supplier/AddFood", { vtID: vtID, vtName: vtName, name: name, describe: describe,imgPath:imgPath }, function (response) {
+                alert(response);
+            });
+
+
+            window.location = "/Supplier/AddFood";
+        });
+
+        var _imgLocalIdArray = [],
+            _imgServerIdArray = [];
+
+        var images = {
+            localId: [],//微信返回的本地id列表
+            serverId: [],//微信返回的服务器id列表
+        };
+        ioslocId=[];//用于兼容ios的本地id列表 图片是base64格式的
+
+
+        //企业微信添加图片
+        //mui("body").on('tap', '#addImgBtn', function (event) {
+        //    wx.chooseImage({
+        //        count: 1, // 默认9
+        //        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        //        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        //        defaultCameraMode: "batch", //表示进入拍照界面的默认模式，目前有normal与batch两种选择，normal表示普通单拍模式，batch表示连拍模式，不传该参数则为normal模式。（注：用户进入拍照界面仍然可自由切换两种模式）
+        //        success: function (res) {
+        //            let localIds = res.localIds; // 返回选定照片的本地ID列表，
+
+        //            // 判断 ios
+        //            var imgHtmls = '';
+
+        //            images.localId =images.localId.concat(res.localIds); // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+        //            if (mui.os.ios) {  //判断ios是不是用的 wkwebview 内核
+        //                //alert("ios");
+        //                if (window.__wxjs_is_wkwebview) {
+        //                    //for(var i=0;i<images.localId.length;i++){
+        //                    //    wx.getLocalImgData({  //循环调用  getLocalImgData
+
+        //                    //        localId:res.localIds[i], // 图片的localID
+        //                    //        success: function (res) {
+
+        //                    //var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+        //                    //localData = localData.replace('jgp', 'jpeg');//iOS 系统里面得到的数据，类型为 image/jgp,因此需要替换一下
+        //                    //ioslocId.push(localData)  //把base64格式的图片添加到ioslocId数组里 这样该数组里的元素都是base64格式的
+
+        //                    //imgHtmls="";
+        //                    //for(var j=0;j<ioslocId.length;j++){
+        //                    //    //imgHtmls+=`<div class="z_file" style="background-image: url(`+ioslocId[j]+`)"><div class="delete" data-id="`+j+`"></div></div>`
+        //                    //    imgHtmls+='<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', ioslocId[j]);
+        //                    //}
+        //                    //$("#imgUl").html(rows);
+        //                    //        },fail:function(res){
+        //                    //            alert("res");
+        //                    //        }
+        //                    //    });
+        //                    //}
+        //                }
+        //                else
+        //                {
+        //                    //上传至企业微信服务器
+        //                    uploadWeChatServer(images.localId);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                uploadWeChatServer(images.localId);
+        //                //$.each(images.localId,function (index,el) {
+        //                //    imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', el);
+        //                //});
+        //                //$('#imgUl').html(imgHtmls);
+        //            }
+
+        //        }
+        //    });
+
+        //});
+
+
+        //// 递归上传微信的本地图片
+        //var uploadWeChatServer = function(imageLocalIdArray) {
+        //    if (imageLocalIdArray.length > 0) {
+        //        // 上传图片
+        //        wx.uploadImage({
+        //            localId: imageLocalIdArray[0],
+        //            isShowProgressTips: 1, // 默认为1，显示进度提示
+        //            success: function(res) {
+        //                imageLocalIdArray.splice(0, 1);
+        //                _imgServerIdArray.push(res.serverId); // 返回图片的服务器端ID
+        //                //上传至业务服务器
+        //                uploadWebServer(res.serverId);
+        //                //uploadWeChatServer(imageLocalIdArray);
+        //            }
+        //        });
+        //    }
+        //};
+
+        //【企业微信上传到业务服务器】
+        //var uploadWebServer = function(sId)
+        //{
+        //    var imgHtmls = "";
+
+        //    $.post("/Supplier/AddImage", { sId: sId}, function (response) {
+        //        imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', response);
+        //        var imgResult = document.getElementById('imgResult');
+        //        imgResult.innerText = response;
+        //        $('#imgUl').html(imgHtmls);
+        //    });
+
+        //}
+
+
+
+        //var uploadWebServer = function(sId)
+        //{
+        //    alert("【上传到业务服务器】");
+        //    _imgServerIdArray= sId;
+        //    alert(_imgServerIdArray);
+        //    //alert("_imgServerIdArray.join: "+_imgServerIdArray.join(','));
+        //    Ak.Http.post({
+        //        url: '~/FoodImages',
+        //        params: {
+        //            //imgServerIds: _imgServerIdArray.join(',')
+        //            imgServerIds: _imgServerIdArray
+        //        },
+        //        successCallback: function(res) {
+        //            alert('上传成功');
+        //        }
+        //    });
+        //}
+
+
+
+
+        //function wxgetLocalImgData(e){
+        //    alert("333");
+        //    var imgHtmls = '';
+        //    if(window.__wxjs_is_wkwebview){
+        //        wx.getLocalImgData({
+        //            localId: e, // 图片的localID
+        //            success: function (res) {
+        //                var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+        //                localData = localData.replace('jgp', 'jpeg');//iOS 系统里面得到的数据，类型为 image/jgp,因此需要替换一下
+        //                imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', localData);
+        //                $('#imgUl').html(imgHtmls);
+        //            },fail:function(res){
+        //                alert("显示失败");
+        //            }
+        //        });
+        //    }else{
+        //        alert(e);
+        //        imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', e);
+        //        //imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status"><img class="bannerImg" src="localId" /></li>'.replace('localId', e);
+        //        alert(imgHtmls);
+        //        $('#imgUl').html(imgHtmls);
+        //        alert("444");
+        //    }
+        //}
+
+        //EPO上传图片
+        function showNativeActionSheet() {
+            if (/android/i.test(navigator.userAgent)) {
+                window.eoopWebView.showNativeActionSheet()
+            }
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+                window.webView.callNative('showNativeActionSheet')
+            }
+        }
+        function getImageFormNative(url) {
+            alert('1');
+            alert(url);
+            var imgHtmls = "";
+            imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', url);
+                var imgResult = document.getElementById('imgResult');
+            imgResult.innerText = url;
+            $('#imgUl').html(imgHtmls);
+            alert(imgHtmls);
+        } 
+
+    </script>
+</body>
+</html>

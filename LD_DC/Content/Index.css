@@ -1,0 +1,704 @@
+body {
+    background-color: #ffffff;
+}
+
+.banner {
+    color: #ffffff;
+}
+
+.changeR {
+    width: 0;
+    height: 0;
+    border: solid 35px;
+    border-top-color: #fff;
+    border-right-color: #fff;
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+    border-left-color: rgba(255, 255, 255, 0.5);
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    z-index: 999998;
+}
+
+.changeF {
+    color: #1296db;
+    font-size: 1.0rem;
+    position: fixed;
+    top: 20px;
+    right: 0px;
+    z-index: 999999;
+    transform: rotate(45deg);
+    text-shadow: 2px 2px 3px #ffffff;
+}
+
+.spanX {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0px 10px 0px 10px;
+    top: 50px;
+    border-bottom: solid 0.75px rgba(255, 255, 255, 0.5);
+    width: 92%;
+}
+
+.spanT1 {
+    position: absolute;
+    left: 20px;
+    top: 22px;
+    font-size: 2.2rem;
+    text-align: left;
+    font-weight: bold;
+}
+
+.spanT11 {
+    /*position: absolute;
+    left: 100px;*/
+    top: 8px;
+    font-size: 0.9rem;
+    text-align: left;
+    color: #1296db;
+}
+
+.spanT2 {
+    position: absolute;
+    left: 10px;
+    top: 30px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.spanT3 {
+    position: absolute;
+    left: 20px;
+    top: 50px;
+    text-align: left;
+    font-weight: lighter;
+    font-size: 0.7rem;
+}
+
+#box {
+    width: 100%;
+    height: 70px;
+    overflow: hidden;
+    position: relative;
+}
+
+    #box span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Opera 11.1 - 12.0 */
+        background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Firefox 3.6 - 15 */
+        background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* Safari 5.1 - 6.0 */
+        background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+        background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%); /* 标准的语法（必须放在最后）*/
+    }
+
+.bannerImg {
+    height: 100px;
+    width: 100%;
+    /*position: absolute;
+     top:0px;*/
+}
+
+.datePicker {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    border-bottom: 0.75px solid rgb(217,217,217);
+    /*padding-top: 6px;*/
+    padding-top: 0px;
+    text-align: center;
+}
+
+.currentA {
+    font-size: 0.9rem;
+    color: rgb(64,64,64);
+    font-weight: bold;
+    position: relative;
+    top: 6px;
+}
+
+.preA {
+    /*position: absolute;
+    top: 10px;
+    left: 2px;
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: rgb(0, 148, 255);
+    text-align: left;*/
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #1296db;
+    text-align: left;
+    /*点击范围*/
+    line-height: 40px;
+    text-decoration: none;
+    display: inline-block;
+    height: inherit;
+}
+
+.nextA {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #1296db;
+    text-align: right;
+    /*点击范围*/
+    line-height: 40px;
+    text-decoration: none;
+    display: inline-block;
+    height: inherit;
+}
+
+.jtImg {
+    max-width: 100%;
+    margin-top: 5px;
+    width: 28px;
+    height: 28px;
+    vertical-align: top;
+    border: 0;
+}
+
+.dateChose {
+    position: relative;
+    margin: 0px auto;
+    width: 100px;
+    height: 35px;
+    background-color: rgb(219, 54, 54);
+    border: 0.75px solid rgb(217,217,217);
+    border-radius: 100px;
+}
+
+.zDay {
+    width: 100%;
+    height: 20px;
+    border-bottom: 0.75px solid rgb(217,217,217);
+}
+
+.sDay {
+    width: 100%;
+    height: 30px;
+    border-bottom: 0.75px solid rgb(217,217,217);
+}
+
+.ldmDiv {
+    position: relative;
+    min-height: 80px;
+    padding-top: 7px;
+}
+
+.ldmDiv2 {
+    position: relative;
+    min-height: 80px;
+    padding-top: 7px;
+    padding-bottom: 5px;
+}
+
+.lunch {
+    position: absolute;
+    margin-left: 10px;
+    width: calc(100% - (82px + 21px )); /*用100%的屏幕宽度减去已经知道固定的宽度，就是自适应的部分*/
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+    /*background-image: url('/Images/Index/lunch.jpg');*/
+}
+
+.lunchBtn {
+    margin-left: calc(100% - (82px + 10px));
+    width: 80px;
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+}
+
+.dinner {
+    position: absolute;
+    margin-left: 10px;
+    width: calc(100% - (82px + 21px )); /*用100%的屏幕宽度减去已经知道固定的宽度，就是自适应的部分*/
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+    /*background-image: url('/Images/Index/dinner.jpg');*/
+}
+
+.dinnerBtn {
+    margin-left: calc(100% - (82px + 10px));
+    width: 80px;
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+}
+
+.meeting {
+    position: absolute;
+    margin-left: 10px;
+    width: calc(100% - (82px + 21px )); /*用100%的屏幕宽度减去已经知道固定的宽度，就是自适应的部分*/
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+    /*background-image: url('/Images/Index/meeting.jpg');*/
+}
+
+.meetingBtn {
+    margin-left: calc(100% - (82px + 10px));
+    width: 80px;
+    height: 80px;
+    /*border: 0.75px solid rgb(127,127,127);*/
+    border-top: 0.75px solid rgb(216,216,216);
+    border-right: 0.75px solid rgb(216,216,216);
+    border-bottom: 0.75px solid rgb(216,216,216);
+    border-left: 0.75px dashed rgb(216,216,216);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+}
+
+.details {
+    margin: 7px 10px 7px 10px;
+    min-height: 80px;
+    border: 0.75px solid rgb(255,255,255,0);
+    border-radius: 7px;
+    -moz-border-radius: 7px; /* Old Firefox */
+}
+
+.imglunch {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background-image: url('/Images/Index/lunchSet2.png');
+    background-repeat: round;
+}
+
+.imgdinner {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background-image: url('/Images/Index/dinnerSet1.png');
+    background-repeat: round;
+}
+
+.imgMettinglunch {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    width: 78px;
+    height: 78px;
+    background-image: url('/Images/Index/huiyizhongcan.png');
+    background-repeat: round;
+}
+
+.meetinglunchNum {
+    margin-left: 100px;
+    margin-top: 0.4rem;
+}
+
+.imgempty {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background-image: url('/Images/Index/emptyfish.png');
+    background-repeat: round;
+}
+
+.p1 {
+    color: rgb(64,64,64);
+    margin-left: 100px;
+    margin-top: 0.4rem;
+    font-size: 1.0rem;
+    font-weight: bold;
+}
+
+.p2 {
+    color: rgb(64,64,64);
+    margin-left: 100px;
+    margin-top: 2px;
+    font-size: 0.8rem;
+}
+
+.p3 {
+    color: #1296db;
+    margin-left: 100px;
+    margin-top: 2px;
+    font-size: 0.6rem;
+}
+
+.imgreserve {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/reserve.png') no-repeat center center;
+}
+
+.imgrSuccess {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/订餐成功.png') no-repeat center center;
+}
+
+.imgrUnscheduled {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/未用餐.png') no-repeat center center;
+}
+
+.imgrQRcode {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/扫码就餐.png') no-repeat center center;
+}
+
+.imgrFinish {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/已用餐.png') no-repeat center center;
+}
+
+.imgrTakeOut {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/已转带.png') no-repeat center center;
+}
+
+.imgrNonMeal {
+    width: 80px;
+    height: 80px;
+    background: url('/Images/Index/未用餐.png') no-repeat center center;
+}
+
+.btndes {
+    position: absolute;
+    width: 82px;
+    color: rgb(25, 153, 221);
+    text-align: center;
+    margin-top: 58px;
+    font-size: 0.7rem;
+}
+
+.detailsTitle {
+    height: 32px;
+    margin: 0px;
+    border-bottom: 1px solid rgb(127,127,127,0.8);
+    /*border-image: -o-linear-gradient(rgba(219, 54, 164),rgba(254,220,27)) 30 30;
+    border-image: -webkit-linear-gradient(rgba(219, 54, 164),rgba(254,220,27)) 30 30;
+    border-image: -moz-linear-gradient(rgba(219, 54, 164),rgba(254,220,27)) 30 30;
+    border-image: -ms-linear-gradient(rgba(219, 54, 164),rgba(254,220,27)) 30 30;
+    border-image: linear-gradient(rgba(219, 54, 164),rgba(254,220,27)) 30 30;*/
+}
+
+#rectangle {
+    position: absolute;
+    margin-top: 8px;
+    margin-left: 5px;
+    width: 4px;
+    height: 16px;
+    background: rgb(219, 54, 164);
+}
+
+.detailsP {
+    width: 100px;
+    color: rgb(64,64,64);
+    margin-left: 9px;
+    margin-top: -3px;
+    font-size: 1.0rem;
+    font-weight: bold;
+}
+
+.detailsInfo {
+    height: 80px;
+    margin: 5px;
+    border: 1px solid rgb(210,210,210);
+    background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+}
+
+.detailsInfoNoReserved {
+    height: 80px;
+    margin: 5px;
+    border: 1px solid rgb(210,210,210);
+    background-image: -o-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -moz-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -webkit-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: -ms-linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+    background-image: linear-gradient(90deg, rgba(219, 54, 164,1) 0%,rgba(254,220,27,0.5) 100%);
+}
+
+#divInfo1 {
+    float: left;
+    width: 130px;
+    height: 80px;
+    /*border: 1px solid rgb(76, 255, 0);*/
+}
+
+#divInfo2 {
+    float: left;
+    /*min-width: 150px;*/
+    width: calc(100% - (130px + 80px + 0px ));
+    height: 80px;
+    /*border: 1px solid rgb(255, 0, 0);*/
+}
+
+#divInfo3 {
+    float: right;
+    width: 80px;
+    height: 80px;
+    border-left: 1px solid rgb(210,210,210);
+    text-align: center;
+}
+
+#divInfo1 p {
+    margin-top: 16px;
+    margin-left: 72px;
+    color: rgb(255, 255, 255);
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#divInfoWD {
+    float: left;
+    width: 130px;
+    height: 50px;
+    /*border: 1px solid rgb(76, 255, 0);*/
+}
+
+.divZW {
+    font-size: 2.0rem;
+    font-weight: bold;
+    position: absolute;
+    /*transform: rotate(-45deg);*/
+    color: rgb(255, 255, 255);
+    margin-top: 27px;
+    margin-left: 22px;
+}
+
+.divWW {
+    font-size: 2.0rem;
+    font-weight: bold;
+    position: absolute;
+    /*transform: rotate(-45deg);*/
+    color: rgb(255, 255, 255);
+    margin-top: 27px;
+    margin-left: 22px;
+}
+
+#divInfoWD p {
+    margin-top: 12px;
+    margin-left: 72px;
+    color: rgb(255, 255, 255);
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.divWDR {
+    margin-top: 0.05rem;
+    margin-left: 72px;
+    color: rgb(255, 255, 255);
+    font-size: 0.6rem;
+}
+
+#divInfo2 .info2p1 {
+    margin-top: 16px;
+}
+
+#divInfo2 p {
+    text-align: left;
+    color: rgb(255, 255, 255);
+    font-size: 0.9rem;
+}
+
+.info3img {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/找人外带.png') no-repeat center center;
+    background-size: cover;
+}
+
+.infoOvertimeimg {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/已转带.png') no-repeat center center;
+    background-size: cover;
+}
+
+.infoQRcodeimg {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/扫码就餐.png') no-repeat center center;
+    background-size: cover;
+}
+
+.infoFinish {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/已用餐.png') no-repeat center center;
+    background-size: contain;
+}
+
+.infoNonMeal {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/未用餐.png') no-repeat center center;
+    background-size: contain;
+}
+
+.info3imgWD {
+    margin: 15px auto;
+    width: 50px;
+    height: 50px;
+    background: url('/Images/Index/请人外带.png') no-repeat center center;
+    background-size: cover;
+}
+
+.divhistorical {
+    margin: 5px;
+    height: 30px;
+    line-height: 25px;
+    /*border: 1px solid rgb(0, 148, 255);*/
+    text-align: right;
+}
+
+.ahistorical {
+    vertical-align: middle;
+    color: #1296db;
+    font-size: 0.9rem;
+}
+
+.detailsInfoW {
+    height: 30px;
+    margin: 5px;
+    border-bottom: 1px solid rgb(210,210,210);
+    color: rgb(127,127,127);
+    font-size: 0.9rem;
+}
+
+.dwY {
+    float: left;
+    margin-left: 0px;
+}
+
+.dwD {
+    float: left;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.dwZ {
+    float: left;
+    margin-left: 10px;
+    color: rgb(127,127,127);
+}
+
+.dwW {
+    float: left;
+    margin-left: 20px;
+    color: rgb(127,127,127);
+}
+
+.jcQ {
+    font-size: 4.0rem;
+    color: #ffffff;
+    padding-top: 250px;
+    width: 100%;
+    text-align: center;
+}
+
+.jcYX {
+    font-size: 1.2rem;
+    color: #ffffff;
+    padding-top: 35px;
+    width: 100%;
+    text-align: center;
+}
+
+.jcSJ {
+    font-size: 1.5rem;
+    color: #ffffff;
+    padding-top: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.jcXX {
+    font-size: 1.5rem;
+    color: #ffffff;
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+/*新就餐券*/
+.jcqT {
+    font-size: 2.0rem;
+    color: #ffffff;
+    padding-top: 12px;
+    width: 100%;
+    text-align: center;
+}
+
+.jcLogo {
+    font-size: 5.0rem;
+    color: rgba(0,0,0,0.1);
+    position: absolute;
+    margin-top: 90px;
+}
+
+.jcMark {
+    font-size: 4.8rem;
+    color: rgba(255,255,255,0.1);
+    position: absolute;
+    margin-top: 10px;
+    right: 0px;
+}
+
+.dcqImg {
+    filter: Alpha(opacity=0);
+    background: url('/Images/Index/dcqImg.png') repeat center center;
+}
