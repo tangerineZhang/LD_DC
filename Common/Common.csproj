@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CacheHelper.cs" />
     <Compile Include="Cookies.cs" />
+    <Compile Include="DBHelpers160.cs" />
     <Compile Include="DbHelperSQL.cs" />
     <Compile Include="DbSql.cs" />
     <Compile Include="FileHelper.cs" />

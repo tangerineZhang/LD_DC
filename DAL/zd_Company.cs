@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 //using Maticsoft.DBUtility;//Please add references
 using LD.Common;
+using Common;
 
 namespace LDDC.DAL
 {
@@ -256,10 +257,37 @@ namespace LDDC.DAL
 			return DbHelperSQL.Query(strSql.ToString());
 		}
 
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
+
+        /// <summary>
+        /// 获得个人所在公司
+        /// </summary>
+        public DataSet GetoneList(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select CASE WHEN ISNULL(u.F3,'')<>'' THEN u.F3 ELSE u.UserCode END as NameNum, ");
+            strSql.Append(" CASE WHEN ISNULL(substring(substring(o.F3,charindex('/',o.F3)+1,len(o.F3)-charindex('/',o.F3)),0,charindex('/',substring(o.F3,charindex('/',o.F3)+1,len(o.F3)-charindex('/',o.F3)))),'')<>'' THEN  ");
+            strSql.Append("substring(substring(o.F3,charindex('/',o.F3)+1,len(o.F3)-charindex('/',o.F3)),0,charindex('/',substring(o.F3,charindex('/',o.F3)+1,len(o.F3)-charindex('/',o.F3))))  ");
+            strSql.Append(" else substring(o.F3,charindex('/',o.F3)+1,len(o.F3))");
+            strSql.Append("END as CompanyName,");
+            strSql.Append(" u.UserName as UserName,u.UserLoginID as UserId,u.GenderText as Sex,u.MobilePhone as Phone,u.Email as Emile ");
+            strSql.Append("from dbo.MDM_User u ");
+            strSql.Append(" inner join dbo.MDM_User_Position_Link up on up.UserGUID=u.UserID and up.IsMainPosition=1 and up.Status=1 ");
+            strSql.Append("inner join dbo.MDM_PostOrganization_Link po on po.PositionGuid=up.PositionGUID and po.Status=1 ");
+            strSql.Append(" inner join dbo.MDM_OrganizationUnit o on o.OrgUnitGUID = po.OrgUnitGUID and o.Status=1 ");
+            strSql.Append(" left join dbo.MDM_OrganizationUnit q on q.OrgUnitGUID = po.OrgUnitGUID and o.Status=1 and q.CompanyType=102");
+            strSql.Append("left join dbo.MDM_Position as p on p.PositionGUID=po.PositionGuid  ");
+            //strSql.Append(" where u.Status=1 and u.UserLoginID = '{0}' ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where u.Status=1 and  " + strWhere);
+            }
+            return DBHelpers160.DbHelperSQL.Query(strSql.ToString());
+        }
+
+        /// <summary>
+        /// 获得前几行数据
+        /// </summary>
+        public DataSet GetList(int Top,string strWhere,string filedOrder)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select ");

@@ -14,12 +14,11 @@ namespace LDDC.DAL
         {
             string str = string.Format(" select left(convert(varchar,a.orderDate,21),7) Mouth,a.eType as Types,a.rUserID as UserID,a.rUser as UserName," +
             " isnull(sum(rAmount),0) as Readay," +
-            " sum(case when eDate is NULL then 1 else 0 end) as NoReaday" +
+            " sum(case when eDate is NULL then 1 else 0 end) as NoReaday, sum(case when a.osGuid=5 then 1 else 0 end) as EatNot" +
             " from (" +
             " SELECT [guid],[rGuid],[orderDate],[eID],[eType],[rDate],[eDate],[rUserID],[rUser],[isTakeout],[tDate],[tUserID],[tUser],[osGuid],[osState],[rAmount],[creatorID],[creator],[createDate],[isValid]" +
             " FROM [LDDC].[dbo].[OrderInfo] ) a " +
             " where a.rUserID<>'' {0}" +
-
             " group by left(convert(varchar,a.orderDate,21),7),eType,a.rUserID,a.rUser " +
             " having sum(case when eDate is NULL then 1 else 0 end) <> 0  {1} " +
             " ORDER BY eType,sum(case when eDate is NULL then 1 else 0 end)  desc", where, s);

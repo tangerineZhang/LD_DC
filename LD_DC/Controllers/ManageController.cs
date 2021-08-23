@@ -471,7 +471,7 @@ namespace LD_DC.Controllers
                 row.CreateCell(4).SetCellValue(dt.Rows[i - 2]["UserName"].ToString());
                 row.CreateCell(5).SetCellValue(dt.Rows[i - 2]["Readay"].ToString());
                 row.CreateCell(6).SetCellValue(dt.Rows[i - 2]["NoReaday"].ToString());
-
+                row.CreateCell(7).SetCellValue(dt.Rows[i - 2]["EatNot"].ToString());
 
             }
             #endregion

@@ -8,7 +8,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>绿都订餐</title>
-    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    @*<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
@@ -162,7 +163,7 @@
 
         //预定
         function Collect_click(eid, etype) {
-            //alert(name);
+            alert(etype);
             var reserveDate = $("#reserveDate").text();
 
             //$.post("/Restaurant/SetCollect", { eid: eid, etype: etype, orderDate: orderDate }, function (response) {
@@ -220,32 +221,54 @@
         //    )
         //}
 
-        var a;
+        var a ;
         var b;
-        var c;
+        var c ;
+        var k ;
+
+
 
         //扫码结果回调
         function scanCallBack(scanResult) {
             var eid = a;
             var etype = b;
             var guid = c;
+            var key = k;
             var url = scanResult;
-            $.post("/Restaurant/scanQRCode", { eid: eid, etype: etype, guid: guid, name: url }, function (response) {
-                //alert(response);
-                if (response == "扫描二维码成功！") {
-                    window.location.href = window.location.href;
+
+            if (key=="1") {
+                $.post("/Restaurant/scanQRCode", { eid: eid, etype: etype, guid: guid, name: url }, function (response) {
+
+
+                    if (response == "扫描二维码成功！") {
+
+                        setTimeout(function () {
+                            window.location.href = window.location.href;
+                        }, 1000);
+
+                    mui("#popoverJCDiv").popover('toggle', document.getElementById("div"));
+
+                }
+                else {
+                    alert("扫码失败,请重新扫码!");
                 }
             });
+            }
+            if (key == "2") {
+                $.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
+                    alert(response);
+                    setTimeout(function () {
+                        window.location.href = window.location.href;
 
-            $.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
-                alert(response);
-                //if (response == "扫描二维码成功！") {
-                window.location.href = window.location.href;
-                //}
+                    }, 1000);
+                    mui("#popoverJCDiv").popover('toggle', document.getElementById("div"));
+
 
             });
+            }
 
-        }
+    }
+
         //调用扫码
         function goToScan() {
             let fun = 'scanCallBack' //如果不传则由native直接打开二维码链接
@@ -256,113 +279,66 @@
                 window.webView.callNative('goToScan:', fun)
             }
         }
-        function scanQRCode_click(eid, etype,guid)
+        function scanQRCode_click(eid, etype,guid,key)
         {
             a = eid;
             b = etype;
             c = guid;
-
-            goToScan();
-            //var url = '上海明基餐厅';
-
-            //alert('扫码：'+url);
-            //alert(eid + " " + etype + " " + guid);
-            //a = eid;
-            //b = etype;
-            //c = guid;
-            //$.post("/Restaurant/scanQRCode", { eid: eid, etype: etype, guid: guid, name: url }, function (response) {
-            //    //alert(response);
-            //    alert('4');
-            //    if(response == "扫描二维码成功！")
-            //    {
-            //        alert('5');
-            //        window.location.href = window.location.href;
-            //    }
-
-            //});
-
-            //wx.scanQRCode({
-            //    desc: 'scanQRCode desc',
-            //    needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
-            //    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-            //    success: function(res) {
-            //        //回调
-            //        //扫码后获取结果参数赋值给Input
-            //        var url = res.resultStr;
-            //        //商品条形码，取","后面的
-            //        if(url.indexOf(",")>=0){
-            //            alert('请扫描二维码')
-            //        }else{
-            //            $.post("/Restaurant/scanQRCode", { eid: eid, etype: etype, guid: guid, name: url }, function (response) {
-            //                //alert(response);
-            //                if(response == "扫描二维码成功！")
-            //                {
-            //                    window.location.href = window.location.href;
-            //                }
-
-            //            });
-            //            //调用隐藏/显示弹出层
-            //            //mui("#popoverJCDiv").popover('toggle', document.getElementById("div"));
-            //            //alert("2、"+url);
-            //        }
-            //    },
-            //    error: function(res) {
-            //        if (res.errMsg.indexOf('function_not_exist') > 0) {
-            //            alert('版本过低请升级')
-            //        }
-            //    }
-            //});
+            k = key;
+           goToScan();
+            //scanCallBack("上海明基餐厅");
         };
 
-        function MealNotReserved_click(eid, etype, guid) {
-            
-            a = eid;
-            b = etype;
-            c = guid;
-            goToScan();
-            //var url = '上海明基餐厅';
-            //var reserveDate = $("#reserveDate").text();
-            //alert(eid + " " + etype + " " + guid);
-            //$.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
-            //    alert(response);
-            //    //if (response == "扫描二维码成功！") {
-            //        window.location.href = window.location.href;
-            //    //}
 
-            //});
+        //function MealNotReserved_click(eid, etype, guid) {
 
-            //wx.scanQRCode({
-            //    desc: 'scanQRCode desc',
-            //    needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
-            //    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-            //    success: function(res) {
-            //        //回调
-            //        //扫码后获取结果参数赋值给Input
-            //        var url = res.resultStr;
-            //        //商品条形码，取","后面的
-            //        if(url.indexOf(",")>=0){
-            //            alert('请扫描二维码')
-            //        }else{
-            //             $.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
-            //                alert(response);
-            //                //if(response == "扫描二维码成功！")
-            //                //{
-            //                    window.location.href = window.location.href;
-            //                //}
+        //    a = eid;
+        //    b = etype;
+        //    c = guid;
+        //    goToScan();
+        //    //var url = '上海明基餐厅';
+        //    //var reserveDate = $("#reserveDate").text();
+        //    //alert(eid + " " + etype + " " + guid);
+        //    //$.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
+        //    //    alert(response);
+        //    //    //if (response == "扫描二维码成功！") {
+        //    //        window.location.href = window.location.href;
+        //    //    //}
 
-            //            });
-            //            //调用隐藏/显示弹出层
-            //            //mui("#popoverJCDiv").popover('toggle', document.getElementById("div"));
-            //            //alert("2、"+url);
-            //        }
-            //    },
-            //    error: function(res) {
-            //        if (res.errMsg.indexOf('function_not_exist') > 0) {
-            //            alert('版本过低请升级')
-            //        }
-            //    }
-            //});
-        };
+        //    //});
+
+        //    //wx.scanQRCode({
+        //    //    desc: 'scanQRCode desc',
+        //    //    needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
+        //    //    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        //    //    success: function(res) {
+        //    //        //回调
+        //    //        //扫码后获取结果参数赋值给Input
+        //    //        var url = res.resultStr;
+        //    //        //商品条形码，取","后面的
+        //    //        if(url.indexOf(",")>=0){
+        //    //            alert('请扫描二维码')
+        //    //        }else{
+        //    //             $.post("/Restaurant/MealNotReserved", { eid: eid, etype: etype, name: url }, function (response) {
+        //    //                alert(response);
+        //    //                //if(response == "扫描二维码成功！")
+        //    //                //{
+        //    //                    window.location.href = window.location.href;
+        //    //                //}
+
+        //    //            });
+        //    //            //调用隐藏/显示弹出层
+        //    //            //mui("#popoverJCDiv").popover('toggle', document.getElementById("div"));
+        //    //            //alert("2、"+url);
+        //    //        }
+        //    //    },
+        //    //    error: function(res) {
+        //    //        if (res.errMsg.indexOf('function_not_exist') > 0) {
+        //    //            alert('版本过低请升级')
+        //    //        }
+        //    //    }
+        //    //});
+        //};
 
         function scanQRCodeTO_click(eid, etype)
         {
@@ -390,7 +366,7 @@
                         alert('请扫描二维码')
                     }else{
                         $.post("/Restaurant/scanQRCodeTO", { eid: eid, etype: etype, name: url }, function (response) {
-                            alert(response);
+
                             if(response == "扫描二维码成功！")
                             {
                                 window.location.href = window.location.href;
@@ -411,17 +387,17 @@
         };
 
         function chooseMember() {
-         
+
             //需要选人页面显示已选中状态的人员id
             let ids = [];
-        
+
             if (/android/i.test(navigator.userAgent)) {
                 window.eoopWebView.chooseMember();
             }
             if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
                 window.webView.callNative('chooseMember:', '');
             }
-    
+
         }
 
         //选择人员回调
@@ -429,46 +405,44 @@
         var to;
         var et;
         var or;
+        window.eoopWeb = {
+            confirmMember(json) {
+                var last = JSON.stringify(json); //将JSON对象转化为JSON字符
+                var all = JSON.parse(last);
 
-        function confirmMember(json) {
-            
-            var last = JSON.stringify(json); //将JSON对象转化为JSON字符 
-            alert(last);
-            var all = JSON.parse(last);
-            var userName = all.members;
-            var x = [];
-            x = userName.split(',');
+                var userName = all.members;   //点的是数组里面的值
+                var x = [];
+                x = userName.split(',');
 
-            if (x.length > 1) {
-                alert("只允许选择一个人帮忙转带");
+                if (x.length > 1) {
+                    alert("只允许选择一个人帮忙转带");
+                }
+
+                var userId = all.adnames;
+
+                var guid = gu;
+                var toCount = to;
+                var etype = et;
+                var orderDate = or;
+
+                if (toCount == 0) {
+
+                    $.post("/Restaurant/TakeOut", { tUserID: userId, tUserName: userName, guid: guid, etype: etype, orderDate: orderDate }, function (response) {
+                        //alert(response);
+                        if (response == userName + "帮您带饭！") {
+                            window.location.href = window.location.href;
+                        }
+                        else {
+                            alert(response);
+                        }
+                    });
+
+                }
+                else {
+                    alert("已帮其他员工外带！");
+                }
+
             }
-          
-            var userId = all.adnames;
-
-            alert(userId)
-            var guid = gu;
-            var toCount = to;
-            var etype = et;
-            var orderDate = or;
-
-            if (toCount == 0) {
-       
-                $.post("/Restaurant/TakeOut", { tUserID: userId, tUserName: userName, guid: guid, etype: etype, orderDate: orderDate }, function (response) {
-                    //alert(response);
-                    if (response == userName + "帮您带饭！") {
-                        window.location.href = window.location.href;
-                    }
-                    else {
-                        alert(response);
-                    }
-                });
-
-            }
-            else {
-                alert("已帮其他员工外带！");
-            }
-
-          
         }
 
         function takeOut_click(guid,toCount,etype,orderDate)
@@ -477,7 +451,7 @@
             to = toCount;
             et = etype;
             or = orderDate;
-        
+
             chooseMember();
             //alert('ok');
             //var userId = "li-xue";
@@ -804,8 +778,8 @@
                                             @dt.Rows[i]["eType"].ToString()
                                         </p>
                                         <p class="p2">
-                                            @*餐时：@Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm")~@Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm")*@
-                                            餐时：12:00~13:30
+                                            餐时：@Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm")~@Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm")
+                                            @*餐时：12:00~13:30*@
                                         </p>
                                         <p class="p3" id="btnZCInfo" onclick="btnZCInfo_onclick()">
                                             想了解详细配餐情况
@@ -1196,7 +1170,7 @@
                                         就餐人数：1人
                                     </p>
                                 </div>
-                                <div id="divInfo3" onclick="MealNotReserved_click(2,'中餐','@ViewData["orderLunchGuid"].ToString()')">
+                                <div id="divInfo3" onclick="scanQRCode_click(2,'中餐','@ViewData["orderLunchGuid"].ToString()','2')">
                                     <div class="infoQRcodeimg">
                                         @*扫码就餐-未预定，但就餐*@
                                     </div>
@@ -1219,7 +1193,7 @@
                                         就餐人数：1人
                                     </p>
                                 </div>
-                                <div id="divInfo3" onclick="MealNotReserved_click(3,'晚餐','@ViewData["orderDinnerGuid"].ToString()')">
+                                <div id="divInfo3" onclick="scanQRCode_click(3,'晚餐','@ViewData["orderDinnerGuid"].ToString()','2')">
                                     <div class="infoQRcodeimg">
                                         @*扫码就餐-未预定，但就餐*@
                                     </div>
@@ -1307,7 +1281,7 @@
                                     {
                                         if (ViewData["btnLunchState"] == "扫码就餐")
                                         {
-                                            <div id="divInfo3" onclick="scanQRCode_click(@dtOI.Rows[i]["eID"].ToString(),'@dtOI.Rows[i]["eType"].ToString()','@ViewData["orderLunchGuid"].ToString()')">
+                                            <div id="divInfo3" onclick="scanQRCode_click(@dtOI.Rows[i]["eID"].ToString(),'@dtOI.Rows[i]["eType"].ToString()','@ViewData["orderLunchGuid"].ToString()','1')">
                                                 <div class="infoQRcodeimg">
                                                     @*扫码就餐*@
                                                 </div>
@@ -1369,7 +1343,7 @@
                                     {
                                         if (ViewData["btnDinnerState"] == "扫码就餐")
                                         {
-                                            <div id="divInfo3" onclick="scanQRCode_click(@dtOI.Rows[i]["eID"].ToString(),'@dtOI.Rows[i]["eType"].ToString()','@ViewData["orderDinnerGuid"].ToString()')">
+                                            <div id="divInfo3" onclick="scanQRCode_click(@dtOI.Rows[i]["eID"].ToString(),'@dtOI.Rows[i]["eType"].ToString()','@ViewData["orderDinnerGuid"].ToString()','1')">
                                                 <div class="infoQRcodeimg">
                                                     @*扫码就餐*@
                                                 </div>

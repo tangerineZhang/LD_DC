@@ -12,7 +12,7 @@ namespace LD.Common
     public abstract class DbHelperSQLOA
     {
         //数据库连接字符串(web.config来配置)，可以动态更改connectionString支持多数据库.  
-        private static string connectionString = ConfigurationManager.ConnectionStrings["OracleConnectionOA"].ConnectionString;
+        private static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection160"].ConnectionString;
         public DbHelperSQLOA()
         {            
         }

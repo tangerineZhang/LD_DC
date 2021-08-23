@@ -24,8 +24,8 @@ namespace LD_DC.Controllers
         {
             //获取登录用户
             PublicDao pPublicDao = new PublicDao();
-            //string accessToken = pPublicDao.GetCacheAccessToken();
-            ApiHelper api = new ApiHelper();
+            ////string accessToken = pPublicDao.GetCacheAccessToken();
+            //ApiHelper api = new ApiHelper();
             //if (Request.QueryString["token"] != null)
             //{
             //    string token = Request.QueryString["token"].ToString();
@@ -96,11 +96,11 @@ namespace LD_DC.Controllers
             //    ViewData["code"] = "code:没有数据";
             //}
 
-            HttpContext.Session["userID"] = "zhangwdc";
-            HttpContext.Session["userName"] = "张伟东";
+            HttpContext.Session["userID"] = "hou-xw";
+            HttpContext.Session["userName"] = "侯兴旺";
 
 
-            string company = "集团总部";
+            string company = "洛阳事业部";
             string restaurantGuid = String.Empty;
             DataSet dsRInfo = new DataSet();
             DataSet dsMenuInfo = new DataSet();
@@ -542,7 +542,7 @@ namespace LD_DC.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddFood(int vtID, string vtName, string name, string describe, string imgPath)
+        public bool AddFoods(int vtID, string vtName, string name, string describe, string imgPath)
         {
             try
             {
@@ -573,15 +573,17 @@ namespace LD_DC.Controllers
                 mDishesImage.size = 0;
                 mDishesImage.isCoverphoto = 1;
 
-                pPublicDao.TransactionAddFood(mMenuInfo, mDishesImage, ref rCount, ref errorInfo);
-
-                return Content("添加菜品成功！");
+              bool kry=  pPublicDao.TransactionAddFood(mMenuInfo, mDishesImage, ref rCount, ref errorInfo);
+ 
+                    return kry;
+             
+                
                 //return View("Test");
                 //return RedirectToAction("Test");
             }
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return false;
                 //return Content("添加菜品失败！");
             }
         }

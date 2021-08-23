@@ -40,7 +40,9 @@
             //do something
             var u = navigator.userAgent;
             var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
             var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+
             var h5_config = {};
             var tokeneop = "";
             if (isiOS) {
@@ -52,6 +54,7 @@
                         localStorage.baseUrl = h5_config.apiURLPrefix;
                         tokeneop = h5_config.token;
                         //next();
+              
                         location.href = '/Restaurant/index?token=' + tokeneop;
                     }
                 }
@@ -67,6 +70,7 @@
                     tokeneop = h5_config.token;
                         
                     localStorage.baseUrl = h5_config.apiURLPrefix;
+      
                     location.href = '/Restaurant/index?token=' + tokeneop;
                     //next();
                 }

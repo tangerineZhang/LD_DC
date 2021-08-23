@@ -286,16 +286,17 @@
 
             var name = mui("#inputName")[0].value;
             var describe = mui("#txtDescribe")[0].value;
-            var imgPath =$("#imgResult").html().replace(/"/g, "");
+            var imgPath = $("#imgResult").html().replace(/"/g, "");
+        //    alert(imgPath);
             //alert(vtID + " " + vtName + " " + name+ " " +describe+" "+imgPath);
             if(name == "")
             {
-                toast("请输入菜品名称！");
+                alert("请输入菜品名称！");
                 return;
             }
             if(vtID == "")
             {
-                toast("请选择菜品类型！");
+                alert("请选择菜品类型！");
                 return;
             }
             //if(imgPath == "")
@@ -303,8 +304,17 @@
             //    alert("请上传菜品图片！");
             //    return;
             //}
-            $.post("/Supplier/AddFood", { vtID: vtID, vtName: vtName, name: name, describe: describe,imgPath:imgPath }, function (response) {
+         //   alert('1');
+            $.post("/Supplier/AddFoods", { vtID: vtID, vtName: vtName, name: name, describe: describe, imgPath: imgPath }, function (response) {
+                //  alert('2');
                 alert(response);
+                alert('2');
+                if (response == "True") {
+                    alert("添加菜品成功!");
+                }
+                else {
+                    alert("添加菜品失败!");
+                }
             });
 
 
@@ -318,26 +328,33 @@
             var name = mui("#inputName")[0].value;
             var describe = mui("#txtDescribe")[0].value;
             var imgPath = $("#imgResult").html().replace(/"/g, "");
-            toast(imgPath);
+         //   alert(imgPath);
             //alert(vtID + " " + vtName + " " + name+ " " +describe+" "+imgPath);
             if(name == "")
             {
-                toast("请输入菜品名称！");
-                alert(imgPath);
+                alert("请输入菜品名称！");
+           //     alert(imgPath);
                 return;
             }
             if(vtID == "")
             {
-                toast("请选择菜品类型！");
+                alert("请选择菜品类型！");
                 return;
             }
             if(imgPath == "")
             {
-                toast("请上传菜品图片！");
+                alert("请上传菜品图片！");
                 return;
             }
-            $.post("/Supplier/AddFood", { vtID: vtID, vtName: vtName, name: name, describe: describe,imgPath:imgPath }, function (response) {
-                alert(response);
+            $.post("/Supplier/AddFoods", { vtID: vtID, vtName: vtName, name: name, describe: describe, imgPath: imgPath }, function (response) {
+                alert('1');
+                if (response == true) {
+                    alert("添加菜品成功!");
+                }
+                else {
+                    alert("添加菜品失败!");
+                }
+              
             });
 
 
@@ -504,14 +521,14 @@
             }
         }
         function getImageFormNative(url) {
-            alert('1');
-            alert(url);
+            //alert('1');
+           // alert(url);
             var imgHtmls = "";
             imgHtmls += '<li class="weui-uploader__file weui-uploader__file_status" style="background-image: url(localId)"></li>'.replace('localId', url);
                 var imgResult = document.getElementById('imgResult');
             imgResult.innerText = url;
             $('#imgUl').html(imgHtmls);
-            alert(imgHtmls);
+          //  alert(imgHtmls);
         } 
 
     </script>

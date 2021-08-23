@@ -32,39 +32,39 @@ namespace LD_DC.Controllers
 
                 //string Nameid = Request.Url.Query;
                 //string token = Nameid.Replace("?token=", "");
-           
-            
-                    if (Request.QueryString["token"] != null)
-                    {
-                        string token = Request.QueryString["token"].ToString();
-                        //string token = "a2dffec4-9e70-4b17-86f8-982f0792bd85";
-                        JObject seal = api.SelectNeibu(token);
 
-                        EOPModel eOP = new EOPModel();
-                        eOP.code = seal.Value<string>("code");
-                        if (eOP.code == "0")
-                        {
-                            eOP.username = seal["data"]["username"].ToString();
-                            eOP.nickname = seal["data"]["nickname"].ToString();
-                            ViewData["GetToken"] = token;
 
-                        HttpContext.Session["userID"] = eOP.username;
-                        HttpContext.Session["userName"] = eOP.nickname;
-                    }
-                        else
-                        {
-                            eOP.username = "";
-                            eOP.nickname = "";
+                //if (Request.QueryString["token"] != null)
+                //{
+                //    string token = Request.QueryString["token"].ToString();
+                //    //string token = "a2dffec4-9e70-4b17-86f8-982f0792bd85";
+                //    JObject seal = api.SelectNeibu(token);
 
-                        HttpContext.Session["userID"] = eOP.username;
-                        HttpContext.Session["userName"] = eOP.nickname;
-                        return View("Error");
-                        }
-                    }
-                else
-                {
-                    return View("Error");
-                }
+                //    EOPModel eOP = new EOPModel();
+                //    eOP.code = seal.Value<string>("code");
+                //    if (eOP.code == "0")
+                //    {
+                //        eOP.username = seal["data"]["username"].ToString();
+                //        eOP.nickname = seal["data"]["nickname"].ToString();
+                //        ViewData["GetToken"] = token;
+
+                //        HttpContext.Session["userID"] = eOP.username;
+                //        HttpContext.Session["userName"] = eOP.nickname;
+                //    }
+                //    else
+                //    {
+                //        eOP.username = "";
+                //        eOP.nickname = "";
+
+                //        HttpContext.Session["userID"] = eOP.username;
+                //        HttpContext.Session["userName"] = eOP.nickname;
+                //        return View("Error");
+                //    }
+                //}
+                //else
+                //{
+                //    return View("Error");
+                //}
 
 
                 //if (Request.QueryString["code"] != null && Request.QueryString["code"] != String.Empty)
@@ -110,11 +110,11 @@ namespace LD_DC.Controllers
                 //HttpContext.Session["userID"] = eOP.username;
                 //HttpContext.Session["userName"] = eOP.nickname;
 
-                //HttpContext.Session["userID"] = "zhangwdc";
-                //HttpContext.Session["userName"] = "张伟东";
+                HttpContext.Session["userID"] = "hou-xw";
+                HttpContext.Session["userName"] = "侯兴旺";
 
-                //HttpContext.Session["userID"] = "huangjjb";
-                //HttpContext.Session["userName"] = "黄俊杰";
+                //HttpContext.Session["userID"] = "zhang-h2";
+                //HttpContext.Session["userName"] = "张恒";
                 //HttpContext.Session["userID"] = "yangruia";
                 //HttpContext.Session["userName"] = "杨锐";
 
@@ -127,7 +127,23 @@ namespace LD_DC.Controllers
                 //nowTime = "18:31";
                 ViewData["nowTime"] = nowTime;
 
-                string company = "集团总部";
+                string userID = HttpContext.Session["userID"].ToString();//当前登录人
+                string userName = HttpContext.Session["userName"].ToString();
+                DataSet companyname = new DataSet();
+                zd_Company pzd_Company = new zd_Company();
+                companyname = pzd_Company.GetoneList("u.UserLoginID = '" + userID + "'");
+                string company = string.Empty;
+                if (companyname.Tables[0].Rows[0]["CompanyName"].ToString()=="上海事业部")
+                {
+                    company = "集团总部";
+                }
+                else
+                {
+                  company = companyname.Tables[0].Rows[0]["CompanyName"].ToString();
+                }
+                
+
+
                 //string company = "集团总部";
                 string companyGuid = String.Empty;
                 string restaurantGuid = String.Empty;
@@ -143,15 +159,17 @@ namespace LD_DC.Controllers
                 string btnReserveDinner = String.Empty;
                 string btnRMeetingLunch = String.Empty;
 
-                string userID = HttpContext.Session["userID"].ToString();//当前登录人
-                string userName = HttpContext.Session["userName"].ToString();
 
                 //获取公司Guid
-                zd_Company pzd_Company = new zd_Company();
+      
                 dsCInfo = pzd_Company.GetList("name = '" + company + "'");
                 if (dsCInfo.Tables[0].Rows.Count > 0)
                 {
                     companyGuid = dsCInfo.Tables[0].Rows[0]["guid"].ToString();
+                }
+                else
+                {
+                    companyGuid = "87794BAC-1702-4550-BE1F-CBA01AA8C580";
                 }
 
                 //获取餐厅信息
@@ -177,7 +195,7 @@ namespace LD_DC.Controllers
                 }
                 else
                 {
-                    dsRInfo = pRestaurantInfo.GetList("companyGuid = '" + companyGuid + "'");
+                    dsRInfo = pRestaurantInfo.GetList("companyGuid = '" + companyGuid + "'  and isValid=1");
                     if (dsRInfo.Tables[0].Rows.Count > 0)
                     {
                         restaurantGuid = dsRInfo.Tables[0].Rows[0]["guid"].ToString();
@@ -1208,7 +1226,8 @@ namespace LD_DC.Controllers
                         {
                             DataSet dsWYDJC = new DataSet();
                             dsWYDJC = pOrderInfo.GetList("rUserID = '" + userID + "' and osGuid = 5 and orderDate >= convert(varchar,dateadd(day,-day(getdate())+1,getdate()),111)+' 00:00:01' and orderDate <= convert(varchar,dateadd(day,-day(getdate()),dateadd(month,1,getdate())),111)+' 23:59:59'");
-                            return Content("扫描二维码成功！本月未预定扫码就餐 " + dsWYDJC.Tables[0].Rows.Count + " 次。");
+                           return Content("扫描二维码成功！本月未预定扫码就餐 " + dsWYDJC.Tables[0].Rows.Count + " 次。");
+                           // return Content("扫描二维码成功！");
                         }
                         else
                         {
@@ -1297,7 +1316,7 @@ namespace LD_DC.Controllers
             DataSet dsOITO = new DataSet();
             int rCount = 0;
             string errorInfo = String.Empty;
-
+            
             string restaurantGuid = HttpContext.Session["restaurantGuid"].ToString();
             string userID = HttpContext.Session["userID"].ToString();//当前登录人
             string userName = HttpContext.Session["userName"].ToString();
@@ -2027,8 +2046,8 @@ namespace LD_DC.Controllers
                             sb.Append(dt.Rows[i]["eType"].ToString());
                             sb.Append("</p>");
                             sb.Append("<p class=\"p2\">");
-                            //sb.Append("餐时：" + Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm") + "~" + Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm"));
-                            sb.Append("餐时：12:00~13:30");
+                            sb.Append("餐时：" + Convert.ToDateTime(dt.Rows[i]["eBegTime"].ToString()).ToString("HH:mm") + "~" + Convert.ToDateTime(dt.Rows[i]["eEndTime"].ToString()).ToString("HH:mm"));
+                            //sb.Append("餐时：12:00~13:30");
                             sb.Append("</p>");
                             sb.Append("<p class=\"p3\" id=\"btnZCInfo\">");
                             sb.Append("想了解详细配餐情况");
